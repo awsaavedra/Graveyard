@@ -1,12 +1,12 @@
 <form ng-submit ="saveParty()" class="form-inline party-form"  >
   <div class="form-group">
-    <input ng-model = "party.name" type="text" class="form-control" id="partyName" placeholder="Party Name">
+    <input ng-model = "newParty.name" type="text" class="form-control" id="partyName" placeholder="Party Name">
   </div>
   <div class="form-group">
-    <input ng-model = "party.phone"  type="phone" class="form-control" id="phone" placeholder="Phone Number">
+    <input ng-model = "newParty.phone"  type="phone" class="form-control" id="phone" placeholder="Phone Number">
   </div>
   <div class="form-group">
-    <input ng-model = "party.size" type="party" class="form-control" id="sizeOfParty" placeholder="Size of Party">
+    <input ng-model = "newParty.size" type="party" class="form-control" id="sizeOfParty" placeholder="Size of Party">
   </div>
   <button type="submit" class="btn btn-primary">Add Party</button>
 </form>
@@ -19,7 +19,7 @@
 			<th>Notified</th>
 			<th>Actions</th>
 		</tr>
-		<tr ng-repeat = "party in parties">
+		<tr ng-repeat = "party in parties | orderByPriority">
 			<td><input type="checkbox"></td>
 			<td>
 				<div> <strong> {{party.name}} ({{party.size}} people)</strong> </div>
@@ -31,7 +31,7 @@
 			</td>
 			<td> 
 				<button type="submit" class="btn btn-success"> Send SMS </button>
-				<button type="submit" class="btn btn-danger"> Remove Parties</button>
+				<button ng-click="parties.$remove(party.$id)" type="submit" class="btn btn-danger"> Remove Parties</button>
 			</td>
 		</tr>
 	</theader>
