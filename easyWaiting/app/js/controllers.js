@@ -3,12 +3,9 @@
 /* Controllers */
 
 angular.module('myApp.controllers', [])
-  .controller('LandingPage', [function() {
+  .controller('LandingPageController', [function() {
 
   }])
-  .controller('MyCtrl1', [function() {
-
-  }])
-  .controller('MyCtrl2', [function() {
+  .controller('WaitlistController',[function() {
 
   }]);
