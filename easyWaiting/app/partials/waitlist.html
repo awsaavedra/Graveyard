@@ -20,7 +20,7 @@
 			<th>Actions</th>
 		</tr>
 		<tr ng-repeat = "party in parties | orderByPriority">
-			<td><input type="checkbox"></td>
+			<td><input type="checkbox" ng-model="party.done" ng-change= "parties.$save(party.$id)"></td>
 			<td>
 				<div> <strong> {{party.name}} ({{party.size}} people)</strong> </div>
 				<div> {{party.phone}} </div>
@@ -30,7 +30,7 @@
 				<div> <!-- TODO add party.notified --> </div>
 			</td>
 			<td> 
-				<button type="submit" class="btn btn-success"> Send SMS </button>
+				<button ng-click = "sendTextMessage(party)" type="submit" class="btn btn-success"> Send SMS </button>
 				<button ng-click="parties.$remove(party.$id)" type="submit" class="btn btn-danger"> Remove Parties</button>
 			</td>
 		</tr>
