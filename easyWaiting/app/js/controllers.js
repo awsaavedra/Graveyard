@@ -6,9 +6,9 @@ angular.module('myApp.controllers', [])
   .controller('LandingPageController', [function() {
 
   }])
-  .controller('WaitlistController',['$scope', '$firebase', function($scope, $firebase) {
+  .controller('WaitlistController',['$scope', '$firebase', 'FIREBASE_URL', function($scope, $firebase, FIREBASE_URL) {
     //connecting scope.parties to live firebase data
-    var partiesRef = new Firebase('https://waitandeat-alexander.firebaseio.com/parties');
+    var partiesRef = new Firebase(FIREBASE_URL + 'parties');
     $scope.parties = $firebase(partiesRef);
     //object to store data to waitlist form
     $scope.newParty = { name: '', phone: '', size: '', done:false, notified: 'No'};
@@ -20,7 +20,7 @@ angular.module('myApp.controllers', [])
     };
     //function to send text message to party
     $scope.sendTextMessage = function(party){
-      var textMessageRef = new Firebase('https://waitandeat-alexander.firebaseio.com/textMessages');
+      var textMessageRef = new Firebase(FIREBASE_URL + 'textMessages');
       var textMessages = $firebase(textMessageRef);
       var newTextMessage = {
         phoneNumber: party.phone,
@@ -33,8 +33,8 @@ angular.module('myApp.controllers', [])
       $scope.parties.$save(party.$id); //give id of party being saved
     };
   }])
-  .controller('AuthController', ['$scope', '$firebaseSimpleLogin', '$location', function($scope, $firebaseSimpleLogin, $location ) {
-    var authRef = new Firebase('https://waitandeat-alexander.firebaseio.com/');
+  .controller('AuthController', ['$scope', '$firebaseSimpleLogin', '$location', 'FIREBASE_URL', function($scope, $firebaseSimpleLogin, $location, FIREBASE_URL ) {
+    var authRef = new Firebase(FIREBASE_URL);
     var auth = $firebaseSimpleLogin(authRef); //returned object
 
     $scope.user = {email: '', password: ''};
