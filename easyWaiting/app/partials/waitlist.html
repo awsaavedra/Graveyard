@@ -27,7 +27,10 @@
 				<div> <!-- TODO add date created--> </div>
 			</td>
 			<td> 
-				<div> <!-- TODO add party.notified --> </div>
+				<div> 
+					{{ party.notified }}
+				</div>
+
 			</td>
 			<td> 
 				<button ng-click = "sendTextMessage(party)" type="submit" class="btn btn-success"> Send SMS </button>
