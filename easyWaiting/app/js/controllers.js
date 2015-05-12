@@ -33,7 +33,7 @@ angular.module('myApp.controllers', [])
       $scope.parties.$save(party.$id); //give id of party being saved
     };
   }])
-  .controller('AuthController', ['$scope', '$firebaseSimpleLogin', function($scope, $firebaseSimpleLogin ) {
+  .controller('AuthController', ['$scope', '$firebaseSimpleLogin', '$location', function($scope, $firebaseSimpleLogin, $location ) {
     var authRef = new Firebase('https://waitandeat-alexander.firebaseio.com/');
     var auth = $firebaseSimpleLogin(authRef); //returned object
 
@@ -41,13 +41,20 @@ angular.module('myApp.controllers', [])
     $scope.register = function() {
       auth.$createUser($scope.user.email, $scope.user.password).then(function(data) { //promise
         console.log(data);
-        auth.$login('password', $scope.user);
+        $scope.login();
       });
     };
 
     $scope.login = function(){
       auth.$login('password', $scope.user).then(function(data){
         console.log(data);
+        //redir users to waitlist
+        $location.path('/waitlist');
       });
+    };
+    $scope.logout = function(){
+      auth.$logout();
+      //redir users to landing page
+      $location.path('/')
     };
   }]);
