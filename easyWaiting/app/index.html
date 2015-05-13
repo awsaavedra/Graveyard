@@ -33,10 +33,10 @@
       <div id="navbar" class="navbar-collapse collapse">
         <ul class="nav navbar-nav navbar-right">
           <li>
-            <a href="#/login">Log in </a>
+            <a href="#/login" ng-hide="currentUser">Log in </a>
           </li>
           <li>
-            <a href="" ng-click="logout()">Log out</a>
+            <a href="" ng-click="logout()" ng-show="currentUser">Log out</a>
           </li>
         </ul>
       </div>

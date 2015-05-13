@@ -6,18 +6,18 @@ angular.module('myApp.controllers', [])
   .controller('LandingPageController', [function() {
 
   }])
-  .controller('WaitlistController',['$scope', '$firebase', 'FIREBASE_URL', function($scope, $firebase, FIREBASE_URL) {
-    //connecting scope.parties to live firebase data
-    var partiesRef = new Firebase(FIREBASE_URL + 'parties');
-    $scope.parties = $firebase(partiesRef);
-    //object to store data to waitlist form
-    $scope.newParty = { name: '', phone: '', size: '', done:false, notified: 'No'};
+  .controller('WaitlistController',['$scope', 'partyService', function($scope, partyService) {
+    $scope.parties = partyService.parties; //binds FB parties to scope
 
-    //for saving parties to DB
-    $scope.saveParty = function(){
-      $scope.parties.$add($scope.newParty);
-      $scope.newParty = { name: '', phone: '', size: '', done:false, notified: 'No' };
+    // Object to store data from the waitlist form.
+    $scope.newParty = {name: '', phone: '', size: '', done: false, notified: 'No'};
+
+    // Function to save a new party to the waitlist.
+    $scope.saveParty = function() {
+      partyService.saveParty($scope.newParty);
+      $scope.newParty = {name: '', phone: '', size: '', done: false, notified: 'No'};
     };
+
     //function to send text message to party
     $scope.sendTextMessage = function(party){
       var textMessageRef = new Firebase(FIREBASE_URL + 'textMessages');
@@ -39,8 +39,8 @@ angular.module('myApp.controllers', [])
     $scope.user = {email: '', password: ''};
 
     $scope.authService = authService;
-    
-    
+
+
     //methods for registering, login, and logout new user using authService
     $scope.register = function() {
       authService.register($scope.user);
