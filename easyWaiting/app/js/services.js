@@ -15,11 +15,12 @@ angular.module('myApp.services', [])
   })
   .factory('partyService', function(dataService, $firebase, FIREBASE_URL) {
     var parties = dataService.$child('parties'); //FIREBASE_URL+ 'parties'
+    var users = dataService.$child('users');
 
     var partyServiceObject = {
       parties: parties,
-      saveParty: function(party) {
-        parties.$add(party);
+      saveParty: function(party, userId) {
+        users.$child(userId).$child('parties').$add(party);
       }
     };
 
