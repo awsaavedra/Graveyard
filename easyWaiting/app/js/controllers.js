@@ -6,9 +6,14 @@ angular.module('myApp.controllers', [])
   .controller('LandingPageController', [function() {
 
   }])
-  .controller('WaitlistController',['$scope', 'partyService', 'textMessageService', function($scope, partyService, textMessageService) {
-    $scope.parties = partyService.parties; //binds FB parties to scope
+  .controller('WaitlistController', ['$scope', 'partyService', 'textMessageService', 'authService', function($scope, partyService, textMessageService, authService) {
 
+    //Bind user's parties to $scope.parties
+    authService.getCurrentUser().then(function(user) {
+      if(user){
+        $scope.parties = partyService.getPartiesByUserId(user.id);
+      };
+    })
     // Object to store data from the waitlist form.
     $scope.newParty = {name: '', phone: '', size: '', done: false, notified: 'No'};
 
@@ -20,7 +25,7 @@ angular.module('myApp.controllers', [])
 
     //function to send text message to party
     $scope.sendTextMessage = function(party){
-      textMessageService.sendTextMessage(party);
+      textMessageService.sendTextMessage(party, $scope.currentUser.id);
     };
   }])
   .controller('AuthController', ['$scope', 'authService', function($scope, authService ) {
