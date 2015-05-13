@@ -6,7 +6,7 @@ angular.module('myApp.controllers', [])
   .controller('LandingPageController', [function() {
 
   }])
-  .controller('WaitlistController',['$scope', 'partyService', function($scope, partyService) {
+  .controller('WaitlistController',['$scope', 'partyService', 'textMessageService', function($scope, partyService, textMessageService) {
     $scope.parties = partyService.parties; //binds FB parties to scope
 
     // Object to store data from the waitlist form.
@@ -20,17 +20,7 @@ angular.module('myApp.controllers', [])
 
     //function to send text message to party
     $scope.sendTextMessage = function(party){
-      var textMessageRef = new Firebase(FIREBASE_URL + 'textMessages');
-      var textMessages = $firebase(textMessageRef);
-      var newTextMessage = {
-        phoneNumber: party.phone,
-        size: party.size,
-        name: party.name,
-        done:false 
-      };
-      textMessages.$add(newTextMessage);
-      party.notified = "Yes";
-      $scope.parties.$save(party.$id); //give id of party being saved
+      textMessageService.sendTextMessage(party);
     };
   }])
   .controller('AuthController', ['$scope', 'authService', function($scope, authService ) {
