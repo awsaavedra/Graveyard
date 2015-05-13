@@ -33,24 +33,24 @@ angular.module('myApp.controllers', [])
       $scope.parties.$save(party.$id); //give id of party being saved
     };
   }])
-  .controller('AuthController', ['$scope', '$firebaseSimpleLogin', '$location', 'FIREBASE_URL', 'authService', function($scope, $firebaseSimpleLogin, $location, FIREBASE_URL, authService ) {
-    var authRef = new Firebase(FIREBASE_URL);
-    var auth = $firebaseSimpleLogin(authRef); //returned object
+  .controller('AuthController', ['$scope', 'authService', function($scope, authService ) {
 
+    //obj bound to inputs on reg and login
     $scope.user = {email: '', password: ''};
+
+    $scope.authService = authService;
+    
+    
+    //methods for registering, login, and logout new user using authService
     $scope.register = function() {
-      auth.$createUser($scope.user.email, $scope.user.password).then(function(data) { //promise
-        console.log(data);
-        $scope.login();
-      });
+      authService.register($scope.user);
     };
 
     $scope.login = function(){
       authService.login($scope.user);
     };
+
     $scope.logout = function(){
-      auth.$logout();
-      //redir users to landing page
-      $location.path('/')
+      authService.logout();
     };
   }]);
