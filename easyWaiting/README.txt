@@ -1,5 +1,9 @@
-Simple waiting list app for DMV, restaurants, etc.
+NOTE: zapier & twilio trial expired!!!
+for trying out app use this account: 
+																		Name: test20000@gmail.com
+																		password: google
 
+Simple waiting list app for DMV, restaurants, etc.
 
 Technology Stack:
 	1. Database = Firebase
