@@ -33,3 +33,6 @@ Data structure
 		.
 		.
 		text n
+
+App was made after finishing a tutorial by Gordon Zhu at  watchandcode.com
+
