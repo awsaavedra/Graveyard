@@ -1,3 +1,5 @@
+Hosted on: https://waitandeat-alexander.firebaseapp.com/#/
+
 NOTE: zapier & twilio trial expired!!!
 for trying out app use this account: 
 																		Name: test20000@gmail.com
