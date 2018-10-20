@@ -7,15 +7,15 @@ public class BinarySearch {
         int high = airports.length;
         int mid;
 
-        while( low <= high){
-            mid = (low + high) / 2;
+        while( low <= high) {
+            mid = low + ((low + high) / 2);
             int compare = toFind.compareTo(airports[mid].getCity());
             if(compare < 0 ){
                 high = mid - 1;
             }else if ( compare > 0){
-                high = mid + 1;
+                low = mid + 1;
             }else{
-                return airports.getCode();
+                return airports[mid].getCode();
             }
         }
 
