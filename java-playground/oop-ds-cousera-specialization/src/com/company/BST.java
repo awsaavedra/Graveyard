@@ -5,7 +5,7 @@ package com.company;
 //PostOrder traversal
 //InOrder traversal
 //Level order traversal (breadth first traversal)
-
+//Balanced BST : | LeftHeight - RightHeight | <= 1
 import java.util.Queue;
 
 public class BST {
