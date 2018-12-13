@@ -87,10 +87,97 @@ public class BST {
         return focusNode;
     }
 
+    public boolean remove(int key){
+        Node focusNode = root;
+        Node parent = root;
+
+        boolean isItALeftChild = true;
+
+        while(focusNode.key != key){
+            parent = focusNode;
+
+            if(key < focusNode.key){
+                isItALeftChild = true;
+
+                focusNode = focusNode.leftChild;
+            }else{
+                isItALeftChild = false;
+
+                focusNode = focusNode.rightChild;
+            }
+
+            if(focusNode == null){
+                return false;
+            }
+        }
+
+        if( focusNode.leftChild == null && focusNode.rightChild == null){
+            if(focusNode == root){
+                root = null;
+            }else if(isItALeftChild){
+                parent.leftChild = null;
+            }else{
+                parent.rightChild = null;
+            }
+        }
+        else if(focusNode.rightChild == null){
+            if(focusNode == root){
+                root = focusNode.leftChild;
+            }else if (isItALeftChild){
+                parent.leftChild = focusNode.leftChild;
+            }else{
+                parent.rightChild = focusNode.leftChild;
+            }
+        }
+
+        else if(focusNode.leftChild == null){
+            if(focusNode == root){
+                root = focusNode.rightChild;
+            }else if(isItALeftChild){
+                parent.leftChild = focusNode.rightChild;
+            }else{
+                parent.leftChild = focusNode.rightChild;
+            }
+        }else {
+            Node replacement = getPlacementNode(focusNode);
+
+            if(focusNode == root){
+                root = replacement;
+            }else if(isItALeftChild){
+                parent.leftChild = replacement;
+            }else{
+                parent.rightChild = replacement;
+            }
+            replacement.leftChild = focusNode.leftChild;
+        }
+        return true;
+    }
+
+    public Node getPlacementNode(Node replacedNode){
+        Node replacementParent = replacedNode;
+        Node replacement = replacedNode;
+
+        Node focusNode = replacedNode.rightChild;
+
+        while (focusNode != null){
+            replacementParent = replacement;
+
+            replacement = focusNode;
+
+            focusNode = focusNode.leftChild;
+        }
+
+        if( replacement != replacedNode.rightChild){
+            replacementParent.leftChild = replacement.rightChild;
+            replacement.rightChild = replacedNode.rightChild;
+        }
+        return replacement;
+    }
+
     public static void main(String[] args) {
         BST theTree = new BST();
 
-        theTree.addNode(50, "Baws");
+        theTree.addNode(50, "Boss");
         theTree.addNode(25, "VP");
         theTree.addNode(15, "Office Manager");
         theTree.addNode(30, "Secretary");
@@ -107,6 +194,11 @@ public class BST {
         System.out.println();
 
         System.out.println(theTree.findNode(30));
+
+        System.out.println("REMOVE KEY 25");
+        theTree.remove(25);
+        System.out.println(theTree.findNode(25));
+        theTree.preOrderTraverseTree(theTree.root);
     }
 }
 
