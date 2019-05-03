@@ -58,7 +58,6 @@ public class Student {
             }else break;
         }while( true );
 
-        System.out.println("ENROLLED IN: " + courses);
         System.out.println("TUITION BALANCE: " + tuitionBalance);
 
     }
@@ -83,7 +82,12 @@ public class Student {
     }
 
     // Show status
-    public String showInfo(){
-        return "Name: " + firstName + " " + lastName;
+    public String toString(){
+
+        return "Name: " + firstName + " " + lastName
+                +"\nGrade Level: " + gradeYear
+                +"\nStudent ID: " + studentID
+                +"\nCourses Enrolled: " + courses
+                +"\nBalance: $" + tuitionBalance;
     }
 }

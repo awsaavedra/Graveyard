@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c53cd5e0-894d-4dc6-bb4b-9d5499a3c01e" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/com/company/studentdatabaseapp/Student.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/com/company/studentdatabaseapp/StudentDatabaseApp.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/company/studentdatabaseapp/Student.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/company/studentdatabaseapp/Student.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/company/studentdatabaseapp/StudentDatabaseApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/company/studentdatabaseapp/StudentDatabaseApp.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -16,14 +15,10 @@
   <component name="FileEditorManager">
     <leaf>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/com/company/studentdatabaseapp/Student.java">
+        <entry file="file://$PROJECT_DIR$/src/com/company/studentdatabaseapp/StudentDatabaseApp.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="133">
-              <caret line="73" column="22" selection-start-line="73" selection-start-column="22" selection-end-line="73" selection-end-column="22" />
-              <folding>
-                <element signature="e#1738#1739#0" expanded="true" />
-                <element signature="e#1811#1812#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="482">
+              <caret line="42" selection-start-line="42" selection-end-line="42" />
             </state>
           </provider>
         </entry>
@@ -43,6 +38,7 @@
       <find>Enter</find>
       <find>payment</find>
       <find>TUITION</find>
+      <find>setStudent</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -54,8 +50,8 @@
         <option value="$PROJECT_DIR$/src/com/company/Main.java" />
         <option value="$PROJECT_DIR$/src/com/company/emailapp/EmailApp.java" />
         <option value="$PROJECT_DIR$/src/com/company/emailapp/Email.java" />
-        <option value="$PROJECT_DIR$/src/com/company/studentdatabaseapp/StudentDatabaseApp.java" />
         <option value="$PROJECT_DIR$/src/com/company/studentdatabaseapp/Student.java" />
+        <option value="$PROJECT_DIR$/src/com/company/studentdatabaseapp/StudentDatabaseApp.java" />
       </list>
     </option>
   </component>
@@ -105,7 +101,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1556858264809" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1556915989110" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -169,8 +165,8 @@
       <window_info anchor="bottom" id="Messages" weight="0.329927" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.30218977" />
-      <window_info active="true" anchor="bottom" id="Debug" order="3" visible="true" weight="0.4" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.30072993" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -213,21 +209,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/company/studentdatabaseapp/StudentDatabaseApp.java">
+    <entry file="file://$PROJECT_DIR$/src/com/company/studentdatabaseapp/Student.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="149">
-          <caret line="24" column="22" lean-forward="true" selection-start-line="24" selection-start-column="22" selection-end-line="24" selection-end-column="22" />
+        <state relative-caret-position="232">
+          <caret line="21" column="39" lean-forward="true" selection-start-line="21" selection-start-column="39" selection-end-line="21" selection-end-column="39" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/company/studentdatabaseapp/Student.java">
+    <entry file="file://$PROJECT_DIR$/src/com/company/studentdatabaseapp/StudentDatabaseApp.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="133">
-          <caret line="73" column="22" selection-start-line="73" selection-start-column="22" selection-end-line="73" selection-end-column="22" />
-          <folding>
-            <element signature="e#1738#1739#0" expanded="true" />
-            <element signature="e#1811#1812#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="482">
+          <caret line="42" selection-start-line="42" selection-end-line="42" />
         </state>
       </provider>
     </entry>
