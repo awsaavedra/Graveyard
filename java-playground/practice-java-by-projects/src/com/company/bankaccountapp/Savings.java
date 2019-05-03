@@ -14,6 +14,10 @@ public class Savings extends Account {
     }
 
     // List any methods specific to savings account
-
+    @Override
+    public void showInfo(){
+        super.showInfo();
+        System.out.println("ACCOUNT TYPE: Savings ");
+    }
 
 }

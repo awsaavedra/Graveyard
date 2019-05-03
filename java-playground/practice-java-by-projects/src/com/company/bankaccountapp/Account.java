@@ -31,4 +31,11 @@ public abstract class Account implements BaseRate {
     }
 
     // List common methods
+    public void showInfo(){
+        System.out.println(
+                "NAME: " + name +
+                "\nACCOUNT NUMBER: " + accountNumber +
+                "\nBALANCE: " + balance
+        );
+    }
 }
