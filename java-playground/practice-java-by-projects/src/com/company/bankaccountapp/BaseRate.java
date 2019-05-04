@@ -1,11 +1,9 @@
 package com.company.bankaccountapp;
 
+// A new API available to us
 public interface BaseRate {
 
     // Write a method that returns the base rate
-//    public double baseRate = 0;
-//
-//    public double getBaseRate();
-
+    default double getBaseRate(){ return 2.5; }
 
 }

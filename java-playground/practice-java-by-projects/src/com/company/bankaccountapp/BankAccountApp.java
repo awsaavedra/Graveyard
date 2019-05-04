@@ -17,6 +17,10 @@ public class BankAccountApp {
         System.out.println("***********");
         savingsAccount1.showInfo();
 
+        savingsAccount1.deposit(5000);
+        savingsAccount1.deposit(200);
+        savingsAccount1.transfer("Brokerage", 3000);
+
         // Read a CSV File then create new accounts based on that data
 
     }
