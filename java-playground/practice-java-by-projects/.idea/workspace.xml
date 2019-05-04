@@ -2,10 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c53cd5e0-894d-4dc6-bb4b-9d5499a3c01e" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/com/company/bankaccountapp/Account.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/company/bankaccountapp/Account.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/company/bankaccountapp/BaseRate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/company/bankaccountapp/BaseRate.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/company/bankaccountapp/Checking.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/company/bankaccountapp/Checking.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/com/company/bankaccountapp/Savings.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/company/bankaccountapp/Savings.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/com/company/bankaccountapp/BankAccountApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/com/company/bankaccountapp/BankAccountApp.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -19,11 +18,10 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/com/company/bankaccountapp/Account.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="231">
-              <caret line="40" column="31" selection-start-line="40" selection-start-column="31" selection-end-line="40" selection-end-column="31" />
+            <state relative-caret-position="143">
+              <caret line="63" selection-start-line="63" selection-end-line="63" />
               <folding>
-                <element signature="e#1064#1065#0" expanded="true" />
-                <element signature="e#1105#1106#0" expanded="true" />
+                <element signature="e#1749#1750#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -46,6 +44,8 @@
       <find>payment</find>
       <find>TUITION</find>
       <find>setStudent</find>
+      <find>setAccount</find>
+      <find>compound</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -59,10 +59,10 @@
         <option value="$PROJECT_DIR$/src/com/company/emailapp/Email.java" />
         <option value="$PROJECT_DIR$/src/com/company/studentdatabaseapp/Student.java" />
         <option value="$PROJECT_DIR$/src/com/company/studentdatabaseapp/StudentDatabaseApp.java" />
-        <option value="$PROJECT_DIR$/src/com/company/bankaccountapp/BankAccountApp.java" />
         <option value="$PROJECT_DIR$/src/com/company/bankaccountapp/Savings.java" />
-        <option value="$PROJECT_DIR$/src/com/company/bankaccountapp/BaseRate.java" />
         <option value="$PROJECT_DIR$/src/com/company/bankaccountapp/Checking.java" />
+        <option value="$PROJECT_DIR$/src/com/company/bankaccountapp/BaseRate.java" />
+        <option value="$PROJECT_DIR$/src/com/company/bankaccountapp/BankAccountApp.java" />
         <option value="$PROJECT_DIR$/src/com/company/bankaccountapp/Account.java" />
       </list>
     </option>
@@ -113,7 +113,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1556928166178" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1556928973041" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -183,7 +183,7 @@
     <frame x="309" y="1103" width="1280" height="777" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2536349" />
+      <window_info content_ui="combo" id="Project" order="0" weight="0.2536349" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -276,24 +276,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/company/bankaccountapp/BankAccountApp.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="16" column="39" selection-start-line="16" selection-start-column="39" selection-end-line="16" selection-end-column="39" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/company/bankaccountapp/Savings.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="240">
           <caret line="16" column="13" lean-forward="true" selection-start-line="16" selection-start-column="13" selection-end-line="16" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/company/bankaccountapp/BaseRate.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="7" column="4" selection-start-line="7" selection-start-column="4" selection-end-line="7" selection-end-column="4" />
         </state>
       </provider>
     </entry>
@@ -304,13 +290,26 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/company/bankaccountapp/BaseRate.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="7" column="4" selection-start-line="7" selection-start-column="4" selection-end-line="7" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/company/bankaccountapp/BankAccountApp.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="201">
+          <caret line="15" column="35" lean-forward="true" selection-start-line="15" selection-start-column="35" selection-end-line="15" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/company/bankaccountapp/Account.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="231">
-          <caret line="40" column="31" selection-start-line="40" selection-start-column="31" selection-end-line="40" selection-end-column="31" />
+        <state relative-caret-position="143">
+          <caret line="63" selection-start-line="63" selection-end-line="63" />
           <folding>
-            <element signature="e#1064#1065#0" expanded="true" />
-            <element signature="e#1105#1106#0" expanded="true" />
+            <element signature="e#1749#1750#0" expanded="true" />
           </folding>
         </state>
       </provider>
