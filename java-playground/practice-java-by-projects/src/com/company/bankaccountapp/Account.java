@@ -2,13 +2,13 @@ package com.company.bankaccountapp;
 
 public abstract class Account implements BaseRate {
 
-    String name;
-    String sSN;
-    double balance;
+    private String name;
+    private String sSN;
+    private double balance;
 
-    static int index = 10000;
-    String accountNumber;
-    double rate;
+    private static int index = 10000;
+    protected String accountNumber;
+    protected double rate;
 
     public Account(String name, String sSN, double initDeposit) {
         this.name = name;

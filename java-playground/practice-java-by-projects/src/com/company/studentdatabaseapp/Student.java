@@ -21,7 +21,6 @@ public class Student {
         System.out.println("Enter student first name: ");
         this.firstName = in.nextLine();
 
-
         System.out.println("Enter student last name: ");
         this.lastName = in.nextLine();
 
