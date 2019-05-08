@@ -1,7 +1,7 @@
 package com.company;
 
 // Primitive types: byte, short, int, long, float, double, char, boolean
-
+// More on oracle docs: https://docs.oracle.com/javase/tutorial/java/nutsandbolts/datatypes.html
 public class Primitives {
 
     public static void main(String[] args) {
