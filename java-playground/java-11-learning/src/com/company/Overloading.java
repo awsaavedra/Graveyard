@@ -1,5 +1,7 @@
 package com.company;
 
+// Method overloading improves code readability and re-usability
+
 public class Overloading {
     public static void main(String[] args) {
         calcFeetAndINchesToCentimeters(2, 11);
