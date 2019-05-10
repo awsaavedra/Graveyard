@@ -3,22 +3,87 @@ package com.company;
 public class ControlFlow {
 
     public static void main(String[] args) {
+        System.out.println(sumDigits(125));
+        System.out.println(sumDigits(1));
 
+    }
 
-        for( int i = 2; i <= 8; i++){
-            System.out.println("With an interest rate of: " + i + " The total interest is: "
-                    + String.format("%.2f", calcInterest(10000.0, i)));
+    public static int sumDigits(int number){
+        if( number < 10){
+            return -1;
+        }else{
+            int sum = 0;
+            for( int i = number; i !=0; i /= 10){
+                sum += i % 10;
+            }
+            return sum;
         }
+    }
+//    public static void main(String[] args) {
+//
+//        int cnt = 1;
+//        while(true){
+//            if( cnt == 5) break;
+//            System.out.println("Count value is " + cnt);
+//            cnt++;
+//        }
+//
+//        int count2 = 1;
+//        do{
+//            System.out.println("Count value was " + count2);
+//            count2++;
+//        }while (count2 != 6);
+//
+//    }
 
-        System.out.println();
 
-        for( int i = 8; i >= 2; i--){
-            System.out.println("With an interest rate of: " + i + " The total interest is: "
-                    + String.format("%.2f", calcInterest(10000.0, i)));
-        }
 
-        // For each is another loop, but we will discuss it once we cover arrays and complex data types
-        
+//    public static double calcInterest(double amount, double interestRate){
+//        return( amount * (interestRate / 100));
+//    }
+//
+//    public static boolean isPrime(int n){
+//        if( n == 1) return false;
+//
+//        for (int i = 2; i <= (long) Math.sqrt(n); i++){
+//            if( n % i == 0) return false;
+//        }
+//        return true;
+//    }
+
+//    public static void main(String[] args) {
+//        int count = 1;
+//        while( count != 6){
+//            System.out.println("Count value is " + count);
+//            count++;
+//        }
+//
+//        for( int i = 2; i <= 8; i++){
+//            System.out.println("With an interest rate of: " + i + " The total interest is: "
+//                    + String.format("%.2f", calcInterest(10000.0, i)));
+//        }
+//
+//        System.out.println();
+//
+//        for( int i = 8; i >= 2; i--){
+//            System.out.println("With an interest rate of: " + i + " The total interest is: "
+//                    + String.format("%.2f", calcInterest(10000.0, i)));
+//        }
+//
+//        int sum = 0;
+//        int count = 0;
+//        for( int i = 1; i <= 1000; i++ ){
+//            if( i % 3 == 0 && i % 5 == 0){
+//                count++;
+//                sum += i;
+//                System.out.println("Current number that is divisible by 3 and 5: " + i);
+//            }
+//            if( count == 5) break;
+//        }
+//        System.out.println("sum: " + sum);
+//
+//         For each is another loop, but we will discuss it once we cover arrays and complex data types
+//
 //        int switchVal = 1;
 //
 //        switch (switchVal){
@@ -93,20 +158,5 @@ public class ControlFlow {
 //                System.out.println("Not sure");
 //        }
 //        System.out.println("10,000 at 2% interest = " + calcInterest(10000.0, 2.0));
-
-
-    }
-
-    public static double calcInterest(double amount, double interestRate){
-        return( amount * (interestRate / 100));
-    }
-
-    public static boolean isPrime(int n){
-        if( n == 1) return false;
-
-        for (int i = 2; i <= (long) Math.sqrt(n); i++){
-            if( n % i == 0) return false;
-        }
-        return true;
-    }
+//    }
 }
