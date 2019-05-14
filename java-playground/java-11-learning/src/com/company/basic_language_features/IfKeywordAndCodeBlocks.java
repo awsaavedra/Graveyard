@@ -1,4 +1,4 @@
-package com.company;
+package com.company.basic_language_features;
 
 // More on scope: https://www.geeksforgeeks.org/variable-scope-in-java/
 //

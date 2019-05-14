@@ -1,4 +1,4 @@
-package com.company;
+package com.company.basic_language_features;
 
 // List of java keywords https://en.wikipedia.org/wiki/List_of_Java_keywords
 public class Expressions {

@@ -1,4 +1,4 @@
-package com.company;
+package com.company.basic_language_features;
 
 import java.util.Scanner;
 

@@ -1,6 +1,22 @@
-package com.company;
+package com.company.basic_language_features;
 
 // Method overloading improves code readability and re-usability
+
+/*
+    overloaded rules:
+        - same method name
+        - different parameters
+
+
+    may or may not have the following:
+        - different return types
+        - different access modifiers
+        - checked or unchecked exceptions
+
+    More examples: https://www.javatpoint.com/method-overloading-in-java
+
+    Difference between overriding and overloading: https://stackoverflow.com/questions/837864/java-overloading-vs-overriding
+ */
 
 public class Overloading {
     public static void main(String[] args) {

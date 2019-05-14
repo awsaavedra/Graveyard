@@ -1,4 +1,4 @@
-package com.company;
+package com.company.basic_language_features;
 
 
 // Note: String is NOT a primitive types, it is a class. We will get into non-primitive data types more later in this

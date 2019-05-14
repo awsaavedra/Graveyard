@@ -1,4 +1,4 @@
-package com.company;
+package com.company.basic_language_features;
 
 // Primitive types: byte, short, int, long, float, double, char, boolean
 // More on oracle docs: https://docs.oracle.com/javase/tutorial/java/nutsandbolts/datatypes.html

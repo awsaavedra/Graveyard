@@ -1,4 +1,4 @@
-package com.company;
+package com.company.basic_language_features;
 
 // More on oracle docs: https://docs.oracle.com/javase/tutorial/java/nutsandbolts/operators.html
 public class Operators {

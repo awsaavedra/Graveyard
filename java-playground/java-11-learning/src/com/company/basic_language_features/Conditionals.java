@@ -1,4 +1,4 @@
-package com.company;
+package com.company.basic_language_features;
 
 // Please see oracle docs: https://docs.oracle.com/javase/tutorial/java/nutsandbolts/op2.html
 
