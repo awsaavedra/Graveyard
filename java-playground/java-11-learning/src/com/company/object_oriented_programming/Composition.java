@@ -5,7 +5,7 @@ package com.company.object_oriented_programming;
     https://stackoverflow.com/questions/2399544/difference-between-inheritance-and-composition
 
     Note: best practices 1 file per class, but for illustrative purposes I kept them in the same place
-    to make it easier to look reference classes and examples
+    to make it easier to look at reference classes and examples
  */
 
 public class Composition {
