@@ -15,7 +15,7 @@ package com.company.object_oriented_programming;
         - What problem are they solving?
 
     Note: best practices 1 file per class, but for illustrative purposes I kept them in the same place
-    to make it easier to look and reference classes and examples
+    to make it easier to look at reference classes and examples
  */
 
 import java.util.ArrayList;
