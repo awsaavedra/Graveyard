@@ -1,6 +1,9 @@
 package com.company.object_oriented_programming;
 /*
     For more information on polymorphism: https://docs.oracle.com/javase/tutorial/java/IandI/polymorphism.html
+
+    Note: best practices 1 file per class, but for illustrative purposes I kept them in the same place
+    to make it easier to look reference classes and examples
  */
 
 public class Polymorphism {
