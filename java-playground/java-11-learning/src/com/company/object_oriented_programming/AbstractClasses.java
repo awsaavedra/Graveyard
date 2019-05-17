@@ -4,7 +4,9 @@ package com.company.object_oriented_programming;
    For more information on abstract classes: https://docs.oracle.com/javase/tutorial/java/IandI/abstract.html
 
    Key questions for abstract classes and interfaces:
+
     - How abstract vs concrete should they be?
+    - When should you use one over the other?
 
    Note: best practices 1 file per class, but for illustrative purposes I kept them in the same place
    to make it easier to look at reference classes and examples
