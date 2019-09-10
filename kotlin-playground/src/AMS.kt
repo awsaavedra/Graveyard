@@ -1,23 +1,40 @@
-import java.util.*
-
-
 fun main(args: Array<String>){
-    println("Hello, ${args[0]}!")
-    feedTheFish()
+    getFortuneCookie()
 }
 
-fun feedTheFish(){
-    val day = randomDay()
-    val food = "pellets"
-    println("Today is $day and the fish eat $food")
+fun getFortuneCookie(): String {
+    val fortunes = listOf("Great success ahead!", "Look to the stars and find wisdom",
+        "Things will go well for you today.",
+        "Enjoy a wonderful day of success.",
+        "Be humble and all will turn out well.",
+        "Today is a good day for exercising restraint.",
+        "Take it easy and enjoy life!",
+        "Treasure your friends because they are your greatest fortune.")
+    println("Enter your birthday: ")
+
+    var birthday = readLine()?.toIntOrNull() ?: 1
+
+    return fortunes[birthday.rem(fortunes.size)]
+
 }
 
-fun randomDay(): String {
-    val week = listOf("Monday", "Tuesday", "Wednesday", "Thursday",
-        "Friday", "Saturday", "Sunday")
-
-    return week[Random().nextInt(7)]
-}
+//fun main(args: Array<String>){
+//    println("Hello, ${args[0]}!")
+//    feedTheFish()
+//}
+//
+//fun feedTheFish(){
+//    val day = randomDay()
+//    val food = "pellets"
+//    println("Today is $day and the fish eat $food")
+//}
+//
+//fun randomDay(): String {
+//    val week = listOf("Monday", "Tuesday", "Wednesday", "Thursday",
+//        "Friday", "Saturday", "Sunday")
+//
+//    return week[Random().nextInt(7)]
+//}
 
 
 //fun main(args: Array<String>){
