@@ -1,21 +1,45 @@
 
 import java.util.*
 
+
 fun main(args: Array<String>){
     println("Hello, ${args[0]}")
     feedTheFish()
+
+    // other control flow operators
+
+    var bubbles = 0
+    while(bubbles < 50){
+        bubbles++;
+    }
+
+    repeat(2){
+        println("A fish is swimming")
+    }
+
+    //what's the difference between an expression and statement in Kotlin?
+    // Why doesn't the below work?
+
+//    val noValue = for(x in 1..2){}
+//    val notThisEither = while(false){}
+
+
 }
 
 fun shouldChangeWater(
     day:String,
     temperature: Int = 22,
-    dirty: Int = 20): Boolean{
+    dirty: Int = getDirtySensorReading()): Boolean{
 
+
+    // evaluation
     val isTooHot = temperature > 30
     val isDirty = dirty > 30
     val isSunday = day == "Sunday"
-    
+
     return when{
+
+        // control flow logic using when key word
         isTooHot(temperature) -> true
         isDirty(dirty) -> true
         isSunday(day) -> true
@@ -28,6 +52,17 @@ fun isTooHot(temperature: Int) = temperature > 30
 fun isDirty(dirty: Int) = dirty > 30
 
 fun isSunday(day: String) = day == "Sunday"
+
+
+// Default parameters are called at call time with kotlin
+fun makeNewAquarium() = println("Building a new acquarium.....")
+
+// expensive function to run
+// everytime you run the aquariumStatusReport(aquarium) a new aquarium
+// w/o passing a value for the aquarium argument a new aquarium will be made
+fun aquariumStatusReport(aquarium: Any = makeNewAquarium()){ // What does any do?
+
+}
 
 fun feedTheFish(){
     val day = randomDay()
@@ -64,24 +99,9 @@ fun fishFood(day : String): String{
 }
 
 
-//fun main(args: Array<String>){
-//    getFortuneCookie()
-//}
-//
-//fun getFortuneCookie(): String {
-//    val fortunes = listOf("Great success ahead!", "Look to the stars and find wisdom",
-//        "Things will go well for you today.",
-//        "Enjoy a wonderful day of success.",
-//        "Be humble and all will turn out well.",
-//        "Today is a good day for exercising restraint.",
-//        "Take it easy and enjoy life!",
-//        "Treasure your friends because they are your greatest fortune.")
-//    println("Enter your birthday: ")
-//
-//    var birthday = readLine()?.toIntOrNull() ?: 1
-//
-//    return fortunes[birthday.rem(fortunes.size)]
-//}
+fun getDirtySensorReading() = 20
+
+
 
 
 //fun swim(time: Int, speed: String = "fast"){
