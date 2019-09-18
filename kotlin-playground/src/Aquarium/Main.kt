@@ -17,4 +17,8 @@ fun buildAquarium(){
     println("Height: ${myAquarium.height} cm")
 
     println("Volume: ${myAquarium.volume} liters")
+
+    // To make it more readable, pass in named parameters
+    val smallAquarium = Aquarium(length = 20, width = 15, height = 30)
+    println("Small Aquarium: ${smallAquarium.volume} liters")
 }
