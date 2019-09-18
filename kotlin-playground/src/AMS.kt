@@ -1,39 +1,91 @@
+
+import java.util.*
+
 fun main(args: Array<String>){
-    getFortuneCookie()
+    println("Hello, ${args[0]}")
+    feedTheFish()
 }
 
-fun getFortuneCookie(): String {
-    val fortunes = listOf("Great success ahead!", "Look to the stars and find wisdom",
-        "Things will go well for you today.",
-        "Enjoy a wonderful day of success.",
-        "Be humble and all will turn out well.",
-        "Today is a good day for exercising restraint.",
-        "Take it easy and enjoy life!",
-        "Treasure your friends because they are your greatest fortune.")
-    println("Enter your birthday: ")
+fun shouldChangeWater(
+    day:String,
+    temperature: Int = 22,
+    dirty: Int = 20): Boolean{
 
-    var birthday = readLine()?.toIntOrNull() ?: 1
-
-    return fortunes[birthday.rem(fortunes.size)]
-
+    val isTooHot = temperature > 30
+    val isDirty = dirty > 30
+    val isSunday = day == "Sunday"
+    
+    return when{
+        isTooHot(temperature) -> true
+        isDirty(dirty) -> true
+        isSunday(day) -> true
+        else -> false
+    }
 }
+
+fun isTooHot(temperature: Int) = temperature > 30
+
+fun isDirty(dirty: Int) = dirty > 30
+
+fun isSunday(day: String) = day == "Sunday"
+
+fun feedTheFish(){
+    val day = randomDay()
+    val food = fishFood(day)
+    println("Today is $day and the fish eat $food")
+    shouldChangeWater(day, 20, 50)
+    shouldChangeWater(day)
+    shouldChangeWater(day, dirty = 50)
+
+    if(shouldChangeWater(day)){
+        println("Change the water today")
+    }
+}
+
+fun randomDay(): String {
+    val week = listOf("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
+    return week[Random().nextInt(7)]
+}
+
+fun fishFood(day : String): String{
+
+    var food = "fasting"
+
+    return when(day){
+        "Monday" -> "flakes"
+        "Tuesday" -> "pellets"
+        "Wednesday" -> "redworms"
+        "Thursday" -> "granules"
+        "Friday" -> "mosquitoes"
+        "Sunday" -> "plankton"
+        else -> "fasting"
+
+    }
+}
+
 
 //fun main(args: Array<String>){
-//    println("Hello, ${args[0]}!")
-//    feedTheFish()
+//    getFortuneCookie()
 //}
 //
-//fun feedTheFish(){
-//    val day = randomDay()
-//    val food = "pellets"
-//    println("Today is $day and the fish eat $food")
+//fun getFortuneCookie(): String {
+//    val fortunes = listOf("Great success ahead!", "Look to the stars and find wisdom",
+//        "Things will go well for you today.",
+//        "Enjoy a wonderful day of success.",
+//        "Be humble and all will turn out well.",
+//        "Today is a good day for exercising restraint.",
+//        "Take it easy and enjoy life!",
+//        "Treasure your friends because they are your greatest fortune.")
+//    println("Enter your birthday: ")
+//
+//    var birthday = readLine()?.toIntOrNull() ?: 1
+//
+//    return fortunes[birthday.rem(fortunes.size)]
 //}
-//
-//fun randomDay(): String {
-//    val week = listOf("Monday", "Tuesday", "Wednesday", "Thursday",
-//        "Friday", "Saturday", "Sunday")
-//
-//    return week[Random().nextInt(7)]
+
+
+//fun swim(time: Int, speed: String = "fast"){
+//    println("swimming $speed")
 //}
 
 
@@ -71,4 +123,3 @@ fun getFortuneCookie(): String {
 //
 //    print("What day is it today? " + day)
 //}
-
