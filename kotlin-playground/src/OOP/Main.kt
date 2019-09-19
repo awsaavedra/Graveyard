@@ -1,7 +1,7 @@
-package Aquarium
+package OOP
 
 fun main (args: Array<String>){
-    buildAquarium()
+//    buildAquarium()
 }
 
 fun buildAquarium(){
@@ -20,5 +20,20 @@ fun buildAquarium(){
 
     // To make it more readable, pass in named parameters
     val smallAquarium = Aquarium(length = 20, width = 15, height = 30)
-    println("Small Aquarium: ${smallAquarium.volume} liters")
+    println("Small OOP: ${smallAquarium.volume} liters")
+
+    makeFish()
 }
+
+fun makeFish(){
+    val shark = Shark()
+    val pleco = Plecostomus()
+
+    println("Shark: ${shark.color} \nPlecostomus: ${pleco.color}")
+
+    shark.eat()
+    pleco.eat()
+}
+
+
+
