@@ -10,6 +10,12 @@ class SimpleSpice{
 fun main(args: Array<String>){
     val simpleSpice = SimpleSpice()
     println("${simpleSpice.name} ${simpleSpice.heat}")
+
+    val spiceCabinet = listOf(SpiceContainer(Curry("Yellow Curry", "mild")),
+        SpiceContainer(Curry("Red Curry", "medium")),
+        SpiceContainer(Curry("Green Curry", "spicy")))
+
+    for (element in spiceCabinet) println(element.label)
 }
 
 abstract class Spice(val name: String, val spiciness: String = "mild", color: SpiceColor) : SpiceColor by color {
@@ -41,3 +47,6 @@ object YellowSpiceColor: SpiceColor{
     override val color: String = "Yellow"
 }
 
+data class SpiceContainer (var spice: Spice){
+    val label = spice.name
+}
