@@ -15,15 +15,15 @@ class Dog(val name: String, var weight: Int, val breed: String){
 class JavaDog{
 
     // properties
-    val name
-    val weight
-    val breed
+    var name = ""
+    var weight = 0
+    var breed = ""
 
     // initializer, aka constructor
     constructor(name: String, weight: Int, breed: String){
-        this.name
-        this.weight
-        this.breed
+        this.name = name
+        this.weight = weight
+        this.breed = breed
     }
 
     // below are functions/methods within the class
@@ -35,4 +35,5 @@ class JavaDog{
 fun main(args: Array<String>){
     var myDog = Dog("Fido", 70, "Mixed")
     println(myDog.name)
+    println(myDog.weight)
 }
