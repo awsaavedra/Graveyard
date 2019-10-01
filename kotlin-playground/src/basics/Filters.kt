@@ -1,3 +1,5 @@
+package basics
+
 // Are filters eager or lazy? Could it be both, and if so, how is that possible?
 
 fun main(args: Array<String>){
@@ -7,8 +9,8 @@ fun main(args: Array<String>){
     // single quote '' designate characters and double quotes "" designate strings
 
 //    println(decoration.filter { it[0] == 'p' })
-//    eagerExample()
-//    lazyExample()
+//    basics.eagerExample()
+//    basics.lazyExample()
     filterSpices()
 }
 

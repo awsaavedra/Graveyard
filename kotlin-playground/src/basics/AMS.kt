@@ -1,4 +1,4 @@
-
+package basics
 import java.util.*
 
 
@@ -29,7 +29,8 @@ fun main(args: Array<String>){
 fun shouldChangeWater(
     day:String,
     temperature: Int = 22,
-    dirty: Int = getDirtySensorReading()): Boolean{
+    dirty: Int = getDirtySensorReading()
+): Boolean{
 
 
     // evaluation
@@ -58,7 +59,7 @@ fun isSunday(day: String) = day == "Sunday"
 fun makeNewAquarium() = println("Building a new acquarium.....")
 
 // expensive function to run
-// everytime you run the aquariumStatusReport(aquarium) a new aquarium
+// everytime you run the basics.aquariumStatusReport(aquarium) a new aquarium
 // w/o passing a value for the aquarium argument a new aquarium will be made
 fun aquariumStatusReport(aquarium: Any = makeNewAquarium()){ // What does any do?
 
@@ -109,7 +110,7 @@ fun getDirtySensorReading() = 20
 //}
 
 
-//fun main(args: Array<String>){
+//fun basics.main(args: Array<String>){
 //    println("Hello, wolrd!")
 //    dayOfWeek()
 //

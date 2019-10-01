@@ -1,4 +1,4 @@
-
+package basics
 // Lambdas are also called anonymous classes
 
 // What are higher order functions?
@@ -10,17 +10,15 @@ fun main( args: Array<String>){
     swim
 
     // Kotlin syntax without type inference
-//    val waterFilter = { dirty: Int -> dirty / 2 }
+//    val basics.getWaterFilter = { basics.getDirty: Int -> basics.getDirty / 2 }
 
-    // modified version over waterFilter using
+    // modified version over basics.getWaterFilter using
     // water filter CAN be any function that takes an int and returns an int
 
     println(waterFilter(dirty))
 
-    // call dirty processor
+    // call basics.getDirty processor
     dirtyProcessor()
-
-
 }
 
 val waterFilter: (Int) -> Int =  { dirty -> dirty / 2 }
@@ -34,8 +32,7 @@ fun updateDirty(dirty: Int, operation: (Int) -> Int): Int{
 fun dirtyProcessor(){
     dirty = updateDirty(dirty, waterFilter)
     dirty = updateDirty(dirty, ::feedFish)
-    dirty = updateDirty(dirty){
-        dirty ->
+    dirty = updateDirty(dirty) { dirty ->
         dirty + 50
     }
 }
