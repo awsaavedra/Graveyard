@@ -31,3 +31,5 @@ Questions:
 Unimportant Qusetions: 
 
   1. How to import constants for [Bundle storage keys](https://github.com/niko79542/FlyingDragon/blob/master/GeoQuiz/app/src/main/java/com/example/geoquiz/MainActivity.kt#L14)
+  
+  2. What are coroutines and why would you use them? [Coroutines]( https://kotlinlang.org/docs/reference/coroutines-overview.html#coroutines-for-asynchronous-programming-and-more) and [coroutines in general](https://en.wikipedia.org/wiki/Coroutine)
