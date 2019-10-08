@@ -25,10 +25,11 @@ Questions:
   1. [Speeding up builds?](https://buck.build)
   2. What are [Gradle/Remote cache misses](https://www.youtube.com/watch?v=2frfDMJwvf4&feature=youtu.be&t=384)
   3. How to structure Trivia Game Questions? - [Link](https://github.com/niko79542/FlyingDragon/blob/master/GeoQuiz/app/src/main/java/com/example/geoquiz/MainActivity.kt#L18)
+  4. Why would someone use [Kotlin vs Java](https://www.dashdevs.com/blog/kotlin-vs-java-what-software-engineers-choose-for-android-development/) for Android development?
   
   
   
-Unimportant Qusetions: 
+Misc. Qusetions: 
 
   1. How to import constants for [Bundle storage keys](https://github.com/niko79542/FlyingDragon/blob/master/GeoQuiz/app/src/main/java/com/example/geoquiz/MainActivity.kt#L14)
   
