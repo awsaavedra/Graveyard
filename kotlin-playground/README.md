@@ -26,7 +26,7 @@ Questions:
   2. What are [Gradle/Remote cache misses](https://www.youtube.com/watch?v=2frfDMJwvf4&feature=youtu.be&t=384)
   3. How to structure Trivia Game Questions? - [Link](https://github.com/niko79542/FlyingDragon/blob/master/GeoQuiz/app/src/main/java/com/example/geoquiz/MainActivity.kt#L18)
   4. Why would someone use [Kotlin vs Java](https://www.dashdevs.com/blog/kotlin-vs-java-what-software-engineers-choose-for-android-development/) for Android development?
-  
+  5. What is the use of [val and var in kotlin](https://blog.danlew.net/2017/05/30/mutable-vals-in-kotlin/)?
   
   
 Misc. Qusetions: 
