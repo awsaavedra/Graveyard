@@ -18,6 +18,8 @@ Tools:
 
   1. Intellij
   2. [Kotlin command line runner](https://kotlinlang.org/docs/tutorials/command-line.html)  
+  3. Learn more SQL especially in relation to Gradle annotations
+  4. Android studio hotkeys and IDE
   
   
 Questions:
