@@ -1,21 +1,19 @@
 package com.example.shamed.ui.main
 
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.LiveData
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 
+@Dao
 interface PlayerDao {
-    @Query("SELECT player FROM player_table ORDER BY player ASC")
-    fun getAllPlayers(): MutableLiveData<String>
+    @Query("SELECT * FROM player_table ORDER BY ROWID LIMIT 1")
+    fun getPlayer(): LiveData<Player>
 
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insert(player: Player)
 
-    fun getWeight(): MutableLiveData<Int>
-    fun getHeight(): MutableLiveData<Int>
-    fun userName(): MutableLiveData<String>
-    fun insert(player: Player) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    // TODO: queries for getting height, weight, and everything from that player we pulled
-
-
+    @Query("DELETE FROM player_table")
+    suspend fun deletePlayer()
 }
