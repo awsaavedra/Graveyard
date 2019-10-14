@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">shamed</string>
+    <string name="username">Username</string>
+    <string name="todo">TODO</string>
+    <string name="age">Age</string>
+    <string name="weight">Weight</string>
+    <string name="blah">BLAH!</string>
+    <string name="_250">250</string>
+    <string name="save">Save</string>
+    <string name="defaultWeight">250</string>
 </resources>
