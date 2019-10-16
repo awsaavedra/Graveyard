@@ -20,8 +20,19 @@ Tools:
   2. [Kotlin command line runner](https://kotlinlang.org/docs/tutorials/command-line.html)  
   3. Learn more SQL especially in relation to Gradle annotations
   4. Android studio hotkeys and IDE
+  5. [Blender 3D modeling](https://www.blender.org)
   
+Library:
+
+1.  Capd library
+2.  
   
+Android Particular Design Patterns
+
+1. MVP
+2. MVVM
+3. MVC
+
 Questions:
 
   1. [Speeding up builds?](https://buck.build)
@@ -30,9 +41,10 @@ Questions:
   4. Why would someone use [Kotlin vs Java](https://www.dashdevs.com/blog/kotlin-vs-java-what-software-engineers-choose-for-android-development/) for Android development?
   5. What is the use of [val and var in kotlin](https://blog.danlew.net/2017/05/30/mutable-vals-in-kotlin/)?
   
-  
-Misc. Qusetions: 
+Misc. Questions: 
 
   1. How to import constants for [Bundle storage keys](https://github.com/niko79542/FlyingDragon/blob/master/GeoQuiz/app/src/main/java/com/example/geoquiz/MainActivity.kt#L14)
   
   2. What are coroutines and why would you use them? [Coroutines]( https://kotlinlang.org/docs/reference/coroutines-overview.html#coroutines-for-asynchronous-programming-and-more) and [coroutines in general](https://en.wikipedia.org/wiki/Coroutine)
+  
+
