@@ -20,11 +20,11 @@ Tools:
   2. [Kotlin command line runner](https://kotlinlang.org/docs/tutorials/command-line.html)  
   3. Learn more SQL especially in relation to Gradle annotations
   4. Android studio hotkeys and IDE
-  5. [Blender 3D modeling](https://www.blender.org)
+  5. [Blender 3D modeling](https://www.blender.org) https://www.youtube.com/watch?v=MyxWDHy4ppY
   
 Library:
 
-1.  Capd library
+1.  Kapt library
 2.  
   
 Android Particular Design Patterns
