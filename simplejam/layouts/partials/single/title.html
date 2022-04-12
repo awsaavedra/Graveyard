@@ -1,0 +1,9 @@
+
+{{ $titleColor := "dodgerblue" }}
+
+{{ if eq .Type "photos" }}
+{{ $titleColor = "red" }}
+{{ end }}
+
+<h1 class="post-title" style="color:{{ $titleColor }};" >{{ .Title }}</h1>
+<div class="post-line"></div>

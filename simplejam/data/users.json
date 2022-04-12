@@ -1,0 +1,19 @@
+[
+    {
+        "name": "Alexander",
+        "surname": "Saavedra",
+        "skills": ["Java", "PHP", "SQL" ]
+    },
+    
+    {
+        "name": "Jim",
+        "surname": "Saavedra",
+        "skills": [ "HTML", "CSS" ]
+    },
+
+    {
+        "name": "Gene",
+        "surname": "Saavedra",
+        "skills": [ "photoshop", "sketch" ]
+    }
+]
