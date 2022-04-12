@@ -1,6 +1,14 @@
 # The most basic jamstack demo site
 Javascript APIs and Markup (JAM) stack
 
+1. Static Assets
+2. Git based
+3. CDN hosting
+4. Atomic deploys
+5. Cache Invalidation
+6. Forms: Netlify forms or getform.io
+7. Lunrjs - search
+
 ## JAMstack principles
     1. Static markup
     2. CDN hosting
