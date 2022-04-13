@@ -38,6 +38,8 @@ jobs:
       with:
         target_branch: gh-pages
         build_dir: public
+    - name: 'GitHub actions env workaround'
+      run: 'echo "ACTIONS_ALLOW_UNSECURE_COMMANDS=true" >> $GITHUB_ENV'
       env: 
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     
