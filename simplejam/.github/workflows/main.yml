@@ -20,7 +20,7 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         submodules: true  # Fetch Hugo themes (true OR recursive)
         fetch-depth: 0    # Fetch all history for .GitInfo and .Lastmod
@@ -31,26 +31,16 @@ jobs:
       uses: peaceiris/actions-hugo@v2.4.6
       with:
         hugo-version: 'latest'
-        extended: true
+        # extended: true
         
     # Build site
     - name: Build HUGO Site
       run: hugo --minify
 
     # Commit site to new branch
-    - name: Deploy to GH Pages
-      uses: crazy-max/ghaction-github-pages@v2.6.0
-      with:
-        target_branch: gh-pages
-        build_dir: public
-    - name: log untrusted output
-      run: |
-
-        # disable command workflow processing
-        echo "::stop-commands::`echo -n ${{ github.token }} | sha256sum | head -c 64`"
-
-        # log untrusted output
-        echo "untrusted output"
-
-        # enable workflow command processing
-        echo "::`echo -n ${{ github.token }} | sha256sum | head -c 6
+    - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        if: ${{ github.ref == 'refs/heads/main' }}
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
