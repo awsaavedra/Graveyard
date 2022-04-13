@@ -28,7 +28,7 @@ jobs:
 
     # Set up HUGO environment
     - name: Hugo setup
-      uses: peaceiris/actions-hugo@v2.4.6/
+      uses: peaceiris/actions-hugo@v2.4.6
       with:
         hugo-version: 'latest'
         extended: true
