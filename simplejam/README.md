@@ -60,4 +60,12 @@ Other tech services to potentially use:
     5. formspree
     6. trustpilot
 
+# SDLC Tools
+    1. ZEIT Now
+    2. Bitbucket workflows
+    3. GitLab
+    4. GitHub Actions
+    5. AWS Amplify Console
+    
+
 
