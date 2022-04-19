@@ -1,4 +1,4 @@
-baseURL = "http://awsaavedra.com/simplejam/"
+baseURL = "https://awsaavedra.com/simplejam/"
 languageCode = "en-us"
 title = "JAMSite"
 theme = "tale"
