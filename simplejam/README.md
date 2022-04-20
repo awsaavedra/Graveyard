@@ -8,6 +8,7 @@ Javascript APIs and Markup (JAM) stack
 5. Cache Invalidation
 6. Forms: Netlify forms or getform.io
 7. Lunrjs - search
+8. Google Cloud Platform
 
 ## JAMstack principles
     1. Static markup
