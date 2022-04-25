@@ -56,10 +56,11 @@ Think headless browser, just means a lack of a user interface
             - third party authentication
             - integrates with static site
             - inherits JAMStack hosting, security, etc.
-
-            
+        
 
     1. Netlify CMS
+
+        https://www.netlifycms.org/docs/beta-features/#working-with-a-local-git-repository
     2. Ghost
     3. Strapi
     4. Directus

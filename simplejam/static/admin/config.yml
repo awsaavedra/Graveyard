@@ -1,0 +1,53 @@
+backend:
+  name: git-gateway
+
+# when using the default proxy server port
+local_backend: true
+
+media_folder: static/media
+public_folder: /media
+
+collections:
+  - name: posts
+    label: Posts
+    label_singular: 'Post'
+    folder: content/posts
+    create: true
+    path: '{{slug}}/index'
+    media_folder: ''
+    public_folder: ''
+    fields:
+      - label: Title
+        name: title
+        widget: string
+      - label: "Start time"
+        name: "start"
+        widget: "datetime"
+        default: ""
+        date_format: "DD.MM.YYYY" # e.g. 24.12.2021
+        time_format: "HH:mm" # e.g. 21:07
+        format: "LLL"
+        picker_utc: false
+      - label: 'Cover Image'
+        name: 'image'
+        widget: 'image'
+      - {label: "Author", name: "author", widget: "select", options: ["Alexander Saavedra", "Jane Doe"]}
+      - {label: "Content", name: "body", widget: "markdown"}
+
+  - name: premium
+    label: premiumPage
+    folder: content/premium
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - {label: "Title", name: "title", widget: "string"}
+      - {label: "Author", name: "author", widget: "select", options: ["Alexander Saavedra", "Jane Doe"]}
+      - {label: "Description", name: "description", widget: "text"} 
+      - label: "Start time"
+        name: "start"
+        widget: "datetime"
+        default: ""
+        date_format: "DD.MM.YYYY" # e.g. 24.12.2021
+        time_format: "HH:mm" # e.g. 21:07
+        format: "LLL"
+        picker_utc: false
