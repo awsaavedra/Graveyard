@@ -1,5 +1,9 @@
 backend:
-  name: git-gateway
+  name: github
+  repo: awsaavedra/simplejam # Path to your GitHub repository
+  # optional, defaults to master
+  branch: main
+  
 
 # when using the default proxy server port
 local_backend: true
