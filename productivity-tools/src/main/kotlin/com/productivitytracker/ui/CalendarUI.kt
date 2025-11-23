@@ -112,6 +112,8 @@ class DeepWorkTracker(private val repository: EntryRepository) {
             print("Choice: ")
             val input = readLine()?.trim() ?: continue
             
+            if (input.isEmpty()) continue
+            
             when {
                 input in "1234" -> hours = if (input.toInt() <= hours) hours - 1 else hours + 1
                 input.toLowerCase() == "s" -> {
