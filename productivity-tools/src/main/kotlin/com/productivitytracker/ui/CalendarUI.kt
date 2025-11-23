@@ -48,22 +48,17 @@ class DeepWorkTracker(private val repository: EntryRepository) {
         var hoursLine = "│ "
         
         // Leading spaces for first week
-        for (i in 0 until startDayOfWeek) {
+        repeat(startDayOfWeek) {
             dayLine += "       "
             hoursLine += "       "
         }
 
         for (day in 1..daysInMonth) {
             val date = LocalDate.of(year, month, day)
-            val entry = repository.getEntry(date)
-            val hours = entry?.hoursLogged ?: 0
+            val hours = repository.getEntry(date)?.hoursLogged ?: 0
             
-            val display = when {
-                hours >= 4 -> "✓ $day".padEnd(6)
-                else -> "$day".padEnd(6)
-            }
-
-            val hoursDots = when (hours) {
+            val display = if (hours >= 4) "✓ $day".padEnd(6) else "$day".padEnd(6)
+            val dots = when (hours) {
                 4 -> "⊙⊙⊙⊙"
                 3 -> "⊙⊙⊙ "
                 2 -> "⊙⊙  "
@@ -72,7 +67,7 @@ class DeepWorkTracker(private val repository: EntryRepository) {
             }.padEnd(6)
 
             dayLine += display + " "
-            hoursLine += hoursDots + " "
+            hoursLine += dots + " "
             dayCounter++
 
             if ((startDayOfWeek + dayCounter) % 7 == 0 || day == daysInMonth) {
@@ -97,21 +92,19 @@ class DeepWorkTracker(private val repository: EntryRepository) {
 
     private fun editToday() {
         val today = LocalDate.now()
-        var entry = repository.getEntry(today) ?: DailyEntry(today.toString(), 0)
-        
-        clearScreen()
-        println("╔════════════════════════════════════════════════════════════════╗")
-        println("║              LOG HOURS FOR TODAY: $today                     ║")
-        println("╚════════════════════════════════════════════════════════════════╝")
-        println()
+        var hours = repository.getEntry(today)?.hoursLogged ?: 0
         
         while (true) {
-            println("Current: ${entry.hoursLogged}/4 hours")
+            clearScreen()
+            println("╔════════════════════════════════════════════════════════════════╗")
+            println("║              LOG HOURS FOR TODAY: $today                     ║")
+            println("╚════════════════════════════════════════════════════════════════╝")
+            println()
+            println("Current: $hours/4 hours")
             println()
             
-            for (i in 1..4) {
-                val checked = if (i <= entry.hoursLogged) "☑" else "☐"
-                println("$checked Hour $i")
+            repeat(4) { i ->
+                println("${if (i + 1 <= hours) "☑" else "☐"} Hour ${i + 1}")
             }
             
             println()
@@ -120,26 +113,14 @@ class DeepWorkTracker(private val repository: EntryRepository) {
             val input = readLine()?.trim() ?: continue
             
             when {
-                input in "1234" -> {
-                    val hour = input.toInt()
-                    val newHours = if (hour <= entry.hoursLogged) {
-                        entry.hoursLogged - 1
-                    } else {
-                        entry.hoursLogged + 1
-                    }
-                    entry = entry.copy(hoursLogged = newHours.coerceIn(0, 4))
-                    clearScreen()
-                }
+                input in "1234" -> hours = if (input.toInt() <= hours) hours - 1 else hours + 1
                 input.toLowerCase() == "s" -> {
-                    repository.updateEntry(entry)
+                    repository.updateEntry(DailyEntry(today.toString(), hours.coerceIn(0, 4)))
                     println("✓ Saved!")
                     Thread.sleep(800)
                     return
                 }
-                input.toLowerCase() == "c" -> {
-                    entry = entry.copy(hoursLogged = 0)
-                    clearScreen()
-                }
+                input.toLowerCase() == "c" -> hours = 0
             }
         }
     }
