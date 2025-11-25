@@ -2,14 +2,18 @@
 
 Simple daily calendar tracker for 4 hours of deep work.
 
-## Quick Start
+## Installation
 
 ```bash
-chmod +x run-app.sh
 ./run-app.sh
 ```
 
-First build takes ~30 seconds. Subsequent builds are cached.
+**That's it.** First run auto-installs Java 21 and Maven if needed, then builds and runs the app.
+
+- First run: ~30 seconds (setup + build)
+- Subsequent runs: ~6 seconds (cached)
+
+**Supported:** Linux (apt/yum/dnf), macOS (Homebrew), Windows (manual install prompts)
 
 ## How It Works
 
@@ -39,8 +43,4 @@ All data stored locally at: `~/.productivity-tracker/deep-work.db`
 - **Kotlin** (statically typed)
 - **SQLite** (local-only persistence)
 - **Maven** (build system)
-
-## Requirements
-
-- Java 8+
-- Maven (auto-installed if missing)
+- **Java 21 LTS** (runtime)
