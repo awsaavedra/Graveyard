@@ -2,42 +2,47 @@
 
 set -e
 
-echo "╔═══════════════════════════════════════════════════════════╗"
-echo "║  Deep Work Tracker - Build & Run                         ║"
-echo "╚═══════════════════════════════════════════════════════════╝"
-echo ""
+JAR_FILE="target/deep-work-tracker-1.0.0-jar-with-dependencies.jar"
+CDS_ARCHIVE="target/app.jsa"
+SRC_DIR="src/main/kotlin"
+POM_FILE="pom.xml"
 
-# Check Java
+# Quick validation
 if ! command -v java &> /dev/null; then
-    echo "❌ Java not installed. Please install Java 8+:"
-    echo "   Ubuntu/Debian: sudo apt-get install openjdk-8-jdk"
+    echo "❌ Java not installed"
     exit 1
 fi
 
-JAVA_VERSION=$(java -version 2>&1 | grep -oP '(?<=version ")[^"]*' | head -1)
-echo "✓ Java $JAVA_VERSION"
+# Check if rebuild is needed
+NEEDS_BUILD=false
 
-# Check Maven
-if ! command -v mvn &> /dev/null; then
-    echo "Installing Maven..."
-    sudo apt-get update -qq && sudo apt-get install -y maven -qq 2>/dev/null || true
+if [ ! -f "$JAR_FILE" ]; then
+    NEEDS_BUILD=true
+elif [ "$POM_FILE" -nt "$JAR_FILE" ]; then
+    NEEDS_BUILD=true
+else
+    # Check if any source file is newer than the JAR
+    if [ -d "$SRC_DIR" ]; then
+        while IFS= read -r -d '' file; do
+            if [ "$file" -nt "$JAR_FILE" ]; then
+                NEEDS_BUILD=true
+                break
+            fi
+        done < <(find "$SRC_DIR" -type f -name "*.kt" -print0)
+    fi
 fi
 
-if ! command -v mvn &> /dev/null; then
-    echo "❌ Maven not installed. Please install:"
-    echo "   Ubuntu/Debian: sudo apt-get install maven"
-    exit 1
+if [ "$NEEDS_BUILD" = true ]; then
+    mvn package -q -DskipTests -Dmaven.compiler.useIncrementalCompilation=true
+    # Regenerate CDS archive after rebuild
+    [ -f "$CDS_ARCHIVE" ] && rm -f "$CDS_ARCHIVE"
 fi
 
-echo "Building project..."
-mvn clean package -q -DskipTests
+# Create or update CDS archive for faster startup
+if [ ! -f "$CDS_ARCHIVE" ] || [ "$JAR_FILE" -nt "$CDS_ARCHIVE" ]; then
+    java -XX:ArchiveClassesAtExit="$CDS_ARCHIVE" -jar "$JAR_FILE" <<< "q" &>/dev/null || true
+fi
 
-echo "✓ Build successful!"
-echo ""
-echo "╔═══════════════════════════════════════════════════════════╗"
-echo "║  Running Deep Work Tracker                               ║"
-echo "╚═══════════════════════════════════════════════════════════╝"
-echo ""
-
-java -jar target/deep-work-tracker-1.0.0-jar-with-dependencies.jar
+# Run with CDS for 2-3x faster startup
+exec java -XX:SharedArchiveFile="$CDS_ARCHIVE" -jar "$JAR_FILE"
 
