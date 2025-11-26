@@ -8,10 +8,16 @@ Simple daily calendar tracker for 4 hours of deep work.
 ./run-app.sh
 ```
 
-**That's it.** First run auto-installs Java 21 and Maven if needed, then builds and runs the app.
+**That's it.** First run auto-installs Java 21 and Gradle if needed, then builds and runs the app.
 
-- First run: ~30 seconds (setup + build)
-- Subsequent runs: ~6 seconds (cached)
+- **Instant runs:** ~0.20 seconds (with CDS cache)
+  - No rebuild needed, just launches the JAR
+- **Warm rebuild:** ~2.5 seconds (daemon running)
+  - Gradle daemon already running, incremental compilation
+- **Cold build:** ~8 seconds (daemon startup + build)
+  - Fresh Gradle daemon startup, full compilation
+
+Run `./test-build.sh` to verify performance on your system.
 
 **Supported:** Linux (apt/yum/dnf), macOS (Homebrew), Windows (manual install prompts)
 
@@ -42,5 +48,5 @@ All data stored locally at: `~/.productivity-tracker/deep-work.db`
 
 - **Kotlin** (statically typed)
 - **SQLite** (local-only persistence)
-- **Maven** (build system)
-- **Java 21 LTS** (runtime)
+- **Gradle** (fast incremental builds with daemon + cache)
+- **Java 21 LTS** (runtime with CDS optimization)

@@ -1,7 +1,6 @@
 # Build artifacts
-target/
 build/
-*.jar
+.gradle/
 
 # IDE
 .idea/

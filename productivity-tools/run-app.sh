@@ -2,11 +2,12 @@
 
 set -e
 
-JAR_FILE="target/deep-work-tracker-1.0.0-jar-with-dependencies.jar"
-CDS_ARCHIVE="target/app.jsa"
+JAR_FILE="build/libs/deep-work-tracker-1.0.0.jar"
+CDS_ARCHIVE="build/app.jsa"
 SRC_DIR="src/main/kotlin"
-POM_FILE="pom.xml"
+BUILD_FILE="build.gradle.kts"
 REQUIRED_JAVA_VERSION=21
+GRADLE_WRAPPER="./gradlew"
 
 # Detect OS
 detect_os() {
@@ -85,44 +86,28 @@ install_java() {
 }
 
 # Install Maven
-install_maven() {
+install_build_tool() {
     local os=$(detect_os)
-    echo "╔═══════════════════════════════════════════════════════════╗"
-    echo "║  Installing Apache Maven...                              ║"
-    echo "╚═══════════════════════════════════════════════════════════╝"
     
-    case $os in
-        linux)
-            if command -v apt-get &> /dev/null; then
-                echo "📦 Installing Maven via apt..."
-                sudo apt-get install -y maven
-            elif command -v yum &> /dev/null; then
-                echo "📦 Installing Maven via yum..."
-                sudo yum install -y maven
-            elif command -v dnf &> /dev/null; then
-                echo "📦 Installing Maven via dnf..."
-                sudo dnf install -y maven
-            else
-                echo "❌ Unsupported package manager"
-                exit 1
-            fi
-            ;;
-        mac)
-            if command -v brew &> /dev/null; then
-                echo "📦 Installing Maven via Homebrew..."
-                brew install maven
-            else
-                echo "❌ Homebrew not found"
-                exit 1
-            fi
-            ;;
-        windows)
-            echo "📦 For Windows, Maven will be installed automatically on first build"
-            echo "   Or install manually: https://maven.apache.org/download.cgi"
-            ;;
-    esac
-    
-    echo "✓ Maven installed successfully!"
+    # Install Gradle wrapper if not present
+    if [ ! -f "$GRADLE_WRAPPER" ]; then
+        echo "╔═══════════════════════════════════════════════════════════╗"
+        echo "║  Installing Gradle wrapper...                            ║"
+        echo "╚═══════════════════════════════════════════════════════════╝"
+        
+        # Create minimal wrapper using gradle init if gradle is available
+        if command -v gradle &> /dev/null; then
+            gradle wrapper --gradle-version 8.5
+        else
+            # Download gradle wrapper manually
+            mkdir -p gradle/wrapper
+            curl -s -L -o gradle/wrapper/gradle-wrapper.jar https://raw.githubusercontent.com/gradle/gradle/master/gradle/wrapper/gradle-wrapper.jar
+            curl -s -L -o gradle/wrapper/gradle-wrapper.properties https://raw.githubusercontent.com/gradle/gradle/master/gradle/wrapper/gradle-wrapper.properties
+            curl -s -L -o gradlew https://raw.githubusercontent.com/gradle/gradle/master/gradlew
+            chmod +x gradlew
+        fi
+        echo "✓ Gradle wrapper installed"
+    fi
 }
 
 # Environment validation and auto-setup
@@ -151,19 +136,12 @@ if [ "$CURRENT_JAVA_VERSION" -lt "$REQUIRED_JAVA_VERSION" ]; then
     exit 1
 fi
 
-# Check and install Maven if needed
-if ! command -v mvn &> /dev/null; then
-    echo "⚠️  Maven not found"
-    install_maven
+# Setup Gradle wrapper
+if [ ! -f "$GRADLE_WRAPPER" ]; then
+    echo "⚠️  Gradle wrapper not found"
+    install_build_tool
 else
-    echo "✓ Maven detected"
-fi
-
-# Verify Maven installation
-if ! command -v mvn &> /dev/null; then
-    echo "❌ Maven installation failed"
-    echo "   Please install manually: https://maven.apache.org/download.cgi"
-    exit 1
+    echo "✓ Gradle wrapper detected"
 fi
 
 echo ""
@@ -173,7 +151,7 @@ NEEDS_BUILD=false
 
 if [ ! -f "$JAR_FILE" ]; then
     NEEDS_BUILD=true
-elif [ "$POM_FILE" -nt "$JAR_FILE" ]; then
+elif [ "$BUILD_FILE" -nt "$JAR_FILE" ]; then
     NEEDS_BUILD=true
 else
     # Check if any source file is newer than the JAR
@@ -188,16 +166,19 @@ else
 fi
 
 if [ "$NEEDS_BUILD" = true ]; then
-    mvn package -q -DskipTests -Dmaven.compiler.useIncrementalCompilation=true
+    $GRADLE_WRAPPER jar --build-cache --parallel --daemon
     # Regenerate CDS archive after rebuild
     [ -f "$CDS_ARCHIVE" ] && rm -f "$CDS_ARCHIVE"
 fi
 
 # Create or update CDS archive for faster startup
 if [ ! -f "$CDS_ARCHIVE" ] || [ "$JAR_FILE" -nt "$CDS_ARCHIVE" ]; then
-    java -XX:ArchiveClassesAtExit="$CDS_ARCHIVE" -jar "$JAR_FILE" <<< "q" &>/dev/null || true
+    timeout 5s java -XX:ArchiveClassesAtExit="$CDS_ARCHIVE" -jar "$JAR_FILE" <<< "q" &>/dev/null || true
 fi
 
-# Run with CDS for 2-3x faster startup
-exec java -XX:SharedArchiveFile="$CDS_ARCHIVE" -jar "$JAR_FILE"
+# Run with CDS and optimized JVM flags for faster startup
+exec java -XX:SharedArchiveFile="$CDS_ARCHIVE" \
+    -XX:TieredStopAtLevel=1 \
+    -Xshare:on \
+    -jar "$JAR_FILE"
 
