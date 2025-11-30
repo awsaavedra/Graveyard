@@ -22,6 +22,13 @@ class DeepWorkTracker(private val repository: EntryRepository) {
                     println("Goodbye!")
                     return
                 }
+                else -> {
+                    // Try to parse as day number
+                    val day = input.toIntOrNull()
+                    if (day != null) {
+                        editDay(day)
+                    }
+                }
             }
         }
     }
@@ -87,7 +94,53 @@ class DeepWorkTracker(private val repository: EntryRepository) {
         println("│ Legend: ✓=4h complete  ⊙⊙⊙⊙=4h  ⊙⊙⊙=3h  ⊙⊙=2h  ⊙=1h         │")
         println("└────────────────────────────────────────────────────────────────┘")
         println()
-        println("[n]ext month | [p]rev month | [t]oday | [q]uit")
+        val monthDays = currentMonth.lengthOfMonth()
+        println("[n]ext month | [p]rev month | [t]oday | [1-$monthDays] edit day | [q]uit")
+    }
+
+    private fun editDay(day: Int) {
+        val daysInMonth = currentMonth.lengthOfMonth()
+        
+        // Validate day is within bounds
+        if (day < 1 || day > daysInMonth) {
+            println("⚠️  Invalid day. Please enter a day between 1 and $daysInMonth.")
+            Thread.sleep(1500)
+            return
+        }
+        
+        val date = LocalDate.of(currentMonth.year, currentMonth.month, day)
+        var hours = repository.getEntry(date)?.hoursLogged ?: 0
+        
+        while (true) {
+            clearScreen()
+            println("╔════════════════════════════════════════════════════════════════╗")
+            println("║              LOG HOURS FOR: $date                     ║")
+            println("╚════════════════════════════════════════════════════════════════╝")
+            println()
+            println("Current: $hours/4 hours")
+            println()
+            
+            repeat(4) { i ->
+                println("${if (i + 1 <= hours) "☑" else "☐"} Hour ${i + 1}")
+            }
+            
+            println()
+            println("[0-4] Set hours | [S]ave & back")
+            print("Choice: ")
+            val input = readLine()?.trim() ?: continue
+            
+            if (input.isEmpty()) continue
+            
+            when {
+                input in "01234" -> hours = input.toInt()
+                input.toLowerCase() == "s" -> {
+                    repository.updateEntry(DailyEntry(date.toString(), hours.coerceIn(0, 4)))
+                    println("✓ Saved!")
+                    Thread.sleep(800)
+                    return
+                }
+            }
+        }
     }
 
     private fun editToday() {
@@ -108,21 +161,20 @@ class DeepWorkTracker(private val repository: EntryRepository) {
             }
             
             println()
-            println("[1-4] Toggle hour | [S]ave & back | [C]lear all")
+            println("[0-4] Set hours | [S]ave & back")
             print("Choice: ")
             val input = readLine()?.trim() ?: continue
             
             if (input.isEmpty()) continue
             
             when {
-                input in "1234" -> hours = if (input.toInt() <= hours) hours - 1 else hours + 1
+                input in "01234" -> hours = input.toInt()
                 input.toLowerCase() == "s" -> {
                     repository.updateEntry(DailyEntry(today.toString(), hours.coerceIn(0, 4)))
                     println("✓ Saved!")
                     Thread.sleep(800)
                     return
                 }
-                input.toLowerCase() == "c" -> hours = 0
             }
         }
     }

@@ -17,7 +17,7 @@ Simple daily calendar tracker for 4 hours of deep work.
 - **Cold build:** ~8 seconds (daemon startup + build)
   - Fresh Gradle daemon startup, full compilation
 
-Run `./test-build.sh` to verify performance on your system.
+Run `./test-app.sh` to verify performance and functionality on your system.
 
 **Supported:** Linux (apt/yum/dnf), macOS (Homebrew), Windows (manual install prompts)
 
@@ -34,11 +34,12 @@ Run `./test-build.sh` to verify performance on your system.
 - `[n]` - Next month
 - `[p]` - Previous month
 - `[t]` - Edit today's hours (0-4)
+- `[1-30]` - Edit specific day (range adapts to month length)
 - `[q]` - Quit
 
-**Edit View** - Toggle hours for today:
-- Shows checkbox for each hour (1-4)
-- Press [1-4] to toggle, [s]ave to commit, [c]lear all
+**Edit View** - Set hours for a day:
+- Enter `0-4` to set exact hours
+- Press `[s]` to save and return
 
 ## Data
 
