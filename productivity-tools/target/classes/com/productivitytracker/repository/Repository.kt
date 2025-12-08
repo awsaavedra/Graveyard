@@ -1,12 +1,13 @@
 package com.productivitytracker.repository
 
 import com.productivitytracker.models.DailyEntry
+import java.sql.Connection
 import java.sql.DriverManager
 import java.time.LocalDate
 
-class EntryRepository {
-    private val dbPath = "~/.productivity-tracker/deep-work.db".replace("~", System.getProperty("user.home"))
-    private val connection = DriverManager.getConnection("jdbc:sqlite:$dbPath").apply {
+class EntryRepository(customDbPath: String? = null) {
+    private val dbPath = customDbPath ?: "~/.productivity-tracker/deep-work.db".replace("~", System.getProperty("user.home"))
+    private val connection: Connection = DriverManager.getConnection("jdbc:sqlite:$dbPath").apply {
         val dbFile = java.io.File(dbPath)
         dbFile.parentFile?.mkdirs()
         createStatement().use {
@@ -29,6 +30,18 @@ class EntryRepository {
         connection.prepareStatement(query).use { stmt ->
             stmt.setString(1, entry.date)
             stmt.setInt(2, entry.hoursLogged)
+            stmt.executeUpdate()
+        }
+    }
+    
+    fun close() {
+        connection.close()
+    }
+    
+    fun deleteEntry(date: LocalDate) {
+        val query = "DELETE FROM daily_entries WHERE date = ?"
+        connection.prepareStatement(query).use { stmt ->
+            stmt.setString(1, date.toString())
             stmt.executeUpdate()
         }
     }

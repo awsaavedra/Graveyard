@@ -5,19 +5,25 @@ import com.productivitytracker.repository.EntryRepository
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
+import java.io.File
 import java.time.LocalDate
 
 class P0_DataPersistenceTest : FunSpec({
     
     lateinit var repository: EntryRepository
+    lateinit var testDbFile: File
     
     beforeTest {
-        // Use default repository (no custom path needed)
-        repository = EntryRepository()
+        // Create isolated test database
+        testDbFile = File.createTempFile("test-deep-work-", ".db")
+        repository = EntryRepository(testDbFile.absolutePath)
     }
     
-    // Note: Using shared database for tests
-    // In production, consider isolating test data
+    afterTest {
+        // Clean up test database
+        repository.close()
+        testDbFile.delete()
+    }
     
     context("P0: Save Operations") {
         
