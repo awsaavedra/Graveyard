@@ -10,6 +10,22 @@ Simple daily calendar tracker for 4 hours of deep work.
 
 **That's it.** First run auto-installs Java 21 and Gradle if needed, then builds and runs the app.
 
+### First-Run on Mac M2 (ARM64)
+
+**✅ Fully supported.** The script automatically:
+1. Detects ARM64 architecture  
+2. Installs Homebrew if missing (prompts for password)
+3. Installs Java 21 ARM64-native via Homebrew
+4. Configures PATH immediately (no restart needed)
+5. Initializes Gradle wrapper
+6. Builds and runs the application
+
+**Total time:** ~5 minutes on fresh Mac M2 (Homebrew + Java download)
+
+Run `./test-mac-setup.sh` to validate your environment before installation.
+
+### Performance
+
 - **Instant runs:** ~0.20 seconds (with CDS cache)
   - No rebuild needed, just launches the JAR
 - **Warm rebuild:** ~2.5 seconds (daemon running)
@@ -19,7 +35,11 @@ Simple daily calendar tracker for 4 hours of deep work.
 
 Run `./test-app.sh` to verify performance and functionality on your system.
 
-**Supported:** Linux (apt/yum/dnf), macOS (Homebrew), Windows (manual install prompts)
+**Supported:** 
+- ✅ Linux (apt/yum/dnf) - x86_64
+- ✅ macOS M1/M2/M3 (Homebrew) - ARM64
+- ✅ macOS Intel (Homebrew) - x86_64  
+- ⚠️ Windows (manual install prompts)
 
 ## How It Works
 

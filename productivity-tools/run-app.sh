@@ -22,6 +22,16 @@ detect_os() {
     fi
 }
 
+# Get Homebrew prefix based on architecture
+get_homebrew_prefix() {
+    local arch=$(uname -m)
+    if [[ "$arch" == "arm64" ]]; then
+        echo "/opt/homebrew"
+    else
+        echo "/usr/local"
+    fi
+}
+
 # Get current Java version
 get_java_version() {
     if command -v java &> /dev/null; then
@@ -57,14 +67,56 @@ install_java() {
             fi
             ;;
         mac)
-            if command -v brew &> /dev/null; then
-                echo "📦 Installing OpenJDK 21 via Homebrew..."
-                brew install openjdk@21
-                # Link it
-                sudo ln -sfn /opt/homebrew/opt/openjdk@21/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk-21.jdk 2>/dev/null || true
-            else
-                echo "❌ Homebrew not found. Please install Java 21 manually:"
-                echo "   https://adoptium.net/temurin/releases/"
+            # Detect Homebrew prefix based on architecture
+            local brew_prefix=$(get_homebrew_prefix)
+            
+            # Install Homebrew if not present
+            if ! command -v brew &> /dev/null; then
+                echo "📦 Installing Homebrew (this may take a few minutes)..."
+                echo "⚠️  You may be prompted for your password"
+                /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+                
+                # Refresh environment to pick up Homebrew
+                if [[ -f "${brew_prefix}/bin/brew" ]]; then
+                    eval "$(${brew_prefix}/bin/brew shellenv)"
+                else
+                    echo "❌ Homebrew installation failed"
+                    echo "   Please install manually: https://brew.sh"
+                    exit 1
+                fi
+            fi
+            
+            # Verify Homebrew is now available
+            if ! command -v brew &> /dev/null; then
+                echo "❌ Homebrew not accessible after installation"
+                echo "   Please restart your terminal and try again"
+                exit 1
+            fi
+            
+            echo "📦 Installing OpenJDK 21 via Homebrew..."
+            brew install openjdk@21
+            
+            # Refresh PATH to include Java immediately
+            export PATH="${brew_prefix}/opt/openjdk@21/bin:$PATH"
+            export JAVA_HOME="${brew_prefix}/opt/openjdk@21"
+            
+            # Create system-wide symlink
+            sudo ln -sfn ${brew_prefix}/opt/openjdk@21/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk-21.jdk 2>/dev/null || true
+            
+            # Verify Java is accessible
+            if ! command -v java &> /dev/null; then
+                # Fallback: Try using java_home utility
+                if [[ -x /usr/libexec/java_home ]]; then
+                    export JAVA_HOME=$(/usr/libexec/java_home -v 21 2>/dev/null)
+                    export PATH="$JAVA_HOME/bin:$PATH"
+                fi
+            fi
+            
+            # Final verification
+            if ! command -v java &> /dev/null; then
+                echo "❌ Java installed but not accessible in PATH"
+                echo "   Try running: export PATH=\"${brew_prefix}/opt/openjdk@21/bin:\$PATH\""
+                echo "   Then re-run this script"
                 exit 1
             fi
             ;;
