@@ -114,37 +114,37 @@ run_func_test() {
 # Test 1: Valid day within range (day 15)
 echo "Test 1: Valid day input"
 echo "----------------------------------------"
-run_func_test "  Day 15 (valid)" "15\n2\ns\nq" "LOG HOURS FOR: 2025-11-15"
+run_func_test "  Day 15 (valid)" "p\n15\n2\ns\nq" "LOG HOURS FOR: 2025-11-15"
 echo ""
 
 # Test 2: Out of bounds - day 0
 echo "Test 2: Out of bounds - day 0"
 echo "----------------------------------------"
-run_func_test "  Day 0 (invalid)" "0\nq" "Invalid day. Please enter a day between 1 and 30"
+run_func_test "  Day 0 (invalid)" "p\n0\nq" "Invalid day. Please enter a day between 1 and 30"
 echo ""
 
 # Test 3: Out of bounds - day 31 (November has 30 days)
 echo "Test 3: Out of bounds - day 31"
 echo "----------------------------------------"
-run_func_test "  Day 31 (invalid)" "31\nq" "Invalid day. Please enter a day between 1 and 30"
+run_func_test "  Day 31 (invalid)" "p\n31\nq" "Invalid day. Please enter a day between 1 and 30"
 echo ""
 
 # Test 4: Out of bounds - day 32
 echo "Test 4: Out of bounds - day 32"
 echo "----------------------------------------"
-run_func_test "  Day 32 (invalid)" "32\nq" "Invalid day. Please enter a day between 1 and 30"
+run_func_test "  Day 32 (invalid)" "p\n32\nq" "Invalid day. Please enter a day between 1 and 30"
 echo ""
 
 # Test 5: Boundary - day 1
 echo "Test 5: Boundary - day 1"
 echo "----------------------------------------"
-run_func_test "  Day 1 (valid)" "1\n4\ns\nq" "LOG HOURS FOR: 2025-11-01"
+run_func_test "  Day 1 (valid)" "p\n1\n4\ns\nq" "LOG HOURS FOR: 2025-11-01"
 echo ""
 
 # Test 6: Boundary - day 30 (last day of November)
 echo "Test 6: Boundary - day 30"
 echo "----------------------------------------"
-run_func_test "  Day 30 (valid)" "30\n1\ns\nq" "LOG HOURS FOR: 2025-11-30"
+run_func_test "  Day 30 (valid)" "p\n30\n1\ns\nq" "LOG HOURS FOR: 2025-11-30"
 echo ""
 
 # Test 7: Hours input validation (0-4)

@@ -347,7 +347,184 @@
 
 ---
 
+## Implemented Test Suites
+
+### P0_CombinedInputValidationTest.kt
+
+**Purpose:** Tests interactions between validation scenarios to ensure state correctness across rapid input changes.
+
+**Why These Tests Exist:**
+
+#### Rapid Sequential Day Inputs at Boundaries
+- **What:** Validates day 1, day 31 (January), day 30 (November) in sequence
+- **Why:** Ensures validation context switches correctly between months with different lengths. Prevents off-by-one errors when users navigate rapidly.
+
+#### Mixed Valid and Invalid Day Inputs
+- **What:** Tests sequence: day 15 (valid), day 0 (invalid), day 20 (valid), day 32 (invalid)
+- **Why:** Invalid inputs must not corrupt validation state. System must remain stable and process subsequent valid inputs correctly.
+
+#### Hours Boundary Testing
+- **What:** Tests hours at exact boundaries: -1, 0, 4, 5
+- **Why:** Boundary value analysis catches off-by-one errors. Must reject values outside 0-4 range while accepting boundaries. Prevents data corruption.
+
+#### All Hours Values Sequential Validation
+- **What:** Validates each hour value 0, 1, 2, 3, 4 in sequence
+- **Why:** Users tracking work throughout the day input incrementing values. Entire valid range must be accepted without state issues.
+
+#### Navigation Command Case Insensitivity
+- **What:** Tests n/N, p/P, t/T, q/Q command recognition
+- **Why:** Users shouldn't remember case sensitivity. Input parser must normalize case to prevent frustration when Caps Lock is enabled.
+
+#### Month Context Validation for Day 30
+- **What:** Validates day 30 across November (30 days), January (31 days), February (28 days)
+- **Why:** Day 30 validity depends on month context. Context-aware validation prevents impossible dates like Feb 30 from being saved.
+
+#### Day 31 Validation Across All Months
+- **What:** Tests day 31 validity for all 12 months
+- **Why:** Day 31 is only valid in 7 of 12 months. Ensures validation rejects day 31 for 30-day months and February. Prevents impossible dates in database.
+
+#### Leap Year February 29 Validation
+- **What:** Validates Feb 29 in leap year (2024) vs non-leap year (2025)
+- **Why:** Leap year handling is a classic bug source. Must accept Feb 29 in leap years and reject in non-leap years. Prevents invalid dates causing database errors.
+
+#### February Days Boundary in Leap Year
+- **What:** Tests days 28 (valid), 29 (valid), 30 (invalid), 31 (invalid) in Feb 2024
+- **Why:** Ensures leap year logic doesn't accidentally allow invalid days like Feb 30. Complete boundary set validation for February.
+
+#### Empty Input Handling
+- **What:** Tests empty string followed by valid input "3"
+- **Why:** Users accidentally press Enter before typing. Empty input must be treated as no-op rather than crashing. Ensures robust user experience.
+
+---
+
 ## Test Execution Strategy
+
+### Additional High-Priority Test Cases (Permutations)
+
+#### P0: Combined Input Validation Scenarios
+- **Test:** Rapid sequential day inputs at boundaries
+  - Input: Day 1, then Day 31 for January, then Day 30 for November
+  - Expected: Each validation succeeds independently, correct month context maintained
+  
+- **Test:** Mixed valid and invalid day inputs in sequence
+  - Input: Day 15 (valid), Day 0 (invalid), Day 20 (valid), Day 32 (invalid)
+  - Expected: Valid inputs accepted, invalid rejected with error, application remains stable
+  
+- **Test:** All hours values in rapid succession
+  - Input: Set hours to 0, then 1, then 2, then 3, then 4 on same day
+  - Expected: Each value persists correctly, display updates immediately
+  
+- **Test:** Navigation commands mixed with day selection
+  - Input: "t" (today), select day 5, "n" (next month), select day 10, "p" (previous)
+  - Expected: Each navigation maintains correct context, edits apply to correct month/year
+
+#### P0: Data Persistence Combinations
+- **Test:** Save and load across month navigation
+  - Action: Edit November day 15 (3 hours), navigate to December, edit day 15 (2 hours), return to November
+  - Expected: November 15 shows 3 hours, December 15 shows 2 hours independently
+  
+- **Test:** Update hours in ascending then descending sequence
+  - Action: Day 10: Set 1 hour, save; Set 2 hours, save; Set 3 hours, save; Set 2 hours, save; Set 0 hours, save
+  - Expected: Each update persists, final state is 0 hours
+  
+- **Test:** Multiple days rapid editing without navigation
+  - Action: Edit day 1 (4 hours), day 2 (3 hours), day 3 (2 hours), day 4 (1 hour) in sequence
+  - Expected: All four days saved with correct hours independently
+  
+- **Test:** Save zero hours on previously unedited day
+  - Setup: Day 25 has no entry in database
+  - Action: Edit day 25, set 0 hours, save
+  - Expected: Entry created with 0 hours (or remains empty), no errors
+
+#### P1: Calendar Display Combinations
+- **Test:** Month transition forward through multiple months
+  - Input: Start in October, press "n" five times to reach March
+  - Expected: Each month displays correct length (31, 30, 31, 31, 28/29, 31), year increments at January
+  
+- **Test:** Month transition backward through year boundary
+  - Input: Start in January 2025, press "p" to December 2024
+  - Expected: Year decrements, December shows 31 days, correct day-of-week alignment
+  
+- **Test:** Hours display across all possible values in same month view
+  - Setup: Set day 1=0hrs, day 2=1hr, day 3=2hrs, day 4=3hrs, day 5=4hrs
+  - Expected: Calendar view shows correct symbol count for each day simultaneously
+  
+- **Test:** Today indicator across month navigation
+  - Input: Navigate to previous month, next month, back to current month
+  - Expected: Today indicator only shows on current month, correct day marked
+
+#### P1: Combined Error Handling Scenarios
+- **Test:** Invalid input followed by valid input
+  - Input: Hours: "abc" (invalid), then "2" (valid)
+  - Expected: First input ignored, second input accepted and saved
+  
+- **Test:** Boundary violations in alternating pattern
+  - Input: Day 32 (invalid), Day 15 (valid), Day -1 (invalid), Day 20 (valid)
+  - Expected: Only valid inputs processed, invalid inputs show appropriate errors
+  
+- **Test:** Multiple invalid hours inputs before valid
+  - Input: Hours: 10, then 5, then -1, then "test", then 3
+  - Expected: All invalid inputs rejected, final valid input of 3 accepted
+  
+- **Test:** Non-numeric input mixed with special characters
+  - Input: Day: "1@3", "!5", "#20", "15"
+  - Expected: First three rejected, fourth accepted
+
+#### P1: Data Integrity Across Operations
+- **Test:** Alternating month navigation with edits
+  - Action: Edit Nov day 10 (2hrs), next month, edit Dec day 10 (3hrs), previous month, verify Nov day 10
+  - Expected: November day 10 still shows 2 hours, December day 10 shows 3 hours
+  
+- **Test:** Same day edited in different months across year
+  - Action: Edit day 15 in Jan (1hr), Feb (2hrs), Mar (3hrs), Apr (4hrs)
+  - Expected: Each month's day 15 maintains independent value
+  
+- **Test:** Edit today, navigate away, return to today
+  - Action: Set today to 3 hours, navigate to previous month, return via "t" command
+  - Expected: Today still shows 3 hours
+  
+- **Test:** Maximum and minimum hours on adjacent days
+  - Action: Day 14 set to 0 hours, Day 15 set to 4 hours
+  - Expected: Both values persist correctly, display shows both extremes
+
+#### P0: Leap Year Combined Validation
+- **Test:** February 29 validation across leap and non-leap years
+  - Input: Navigate to Feb 2024 (leap), edit day 29 (valid); Navigate to Feb 2025 (non-leap), attempt day 29 (invalid)
+  - Expected: 2024 accepts day 29, 2025 rejects day 29
+  
+- **Test:** Month length validation across entire year
+  - Input: Attempt day 31 for all 12 months
+  - Expected: Reject for April, June, September, November, February; Accept for others
+  
+- **Test:** February days 28, 29, 30, 31 in leap year
+  - Input: Feb 2024, try day 28 (valid), 29 (valid), 30 (invalid), 31 (invalid)
+  - Expected: Only 28 and 29 accepted
+
+#### P1: Navigation Command Combinations
+- **Test:** Rapid navigation command sequence
+  - Input: "n", "n", "p", "p", "t", "n"
+  - Expected: Month changes correctly, ends one month after today
+  
+- **Test:** Navigation to boundaries of year
+  - Input: From June, press "n" six times to December, then "n" once to January next year
+  - Expected: Year increments at December→January transition
+  
+- **Test:** Return to today from various months
+  - Input: Navigate to random past/future month, press "t"
+  - Expected: Always returns to current month/year, today highlighted
+
+#### P0: Edge Cases in Input Validation
+- **Test:** Day 30 validation across months with different lengths
+  - Input: Day 30 in November (30 days - valid), January (31 days - valid), February (28/29 days - invalid)
+  - Expected: Context-aware validation based on current month
+  
+- **Test:** Hours boundary exactly at limits
+  - Input: Hours: -1, 0, 4, 5 in sequence
+  - Expected: -1 rejected, 0 accepted, 4 accepted, 5 rejected
+  
+- **Test:** Empty input followed by valid input
+  - Input: Hours: "" (empty), then "3"
+  - Expected: Empty input ignored (stay in edit mode), valid input accepted
 
 ### Priority Levels
 1. **P0 (Critical):** Input validation, data persistence, core navigation
