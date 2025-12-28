@@ -2,6 +2,17 @@
 
 A simple, self-contained task management tool using the Eisenhower Decision Matrix. Available in both CLI and Web UI versions.
 
+## What is the Eisenhower Matrix?
+
+The Eisenhower Decision Matrix is a productivity framework that helps you prioritize tasks by urgency and importance. It divides tasks into four quadrants:
+
+- **Do** (Urgent & Important): Tasks requiring immediate attention
+- **Decide** (Not Urgent & Important): Tasks to schedule for later  
+- **Delegate** (Urgent & Not Important): Tasks to assign to others
+- **Delete** (Not Urgent & Not Important): Tasks to eliminate
+
+![The Eisenhower Decision Matrix](images/eisenhower-use.png)
+
 Inspired by Randy Pausch's Time Management Lecture
 https://www.cs.virginia.edu/~robins/Randy/RandyPauschTimeManagement2007.pdf
 
