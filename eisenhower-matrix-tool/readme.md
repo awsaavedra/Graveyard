@@ -2,6 +2,10 @@
 
 A simple, self-contained task management tool using the Eisenhower Decision Matrix. Available in both CLI and Web UI versions.
 
+Inspired by Randy Pausch's Time Management Lecture
+https://www.cs.virginia.edu/~robins/Randy/RandyPauschTimeManagement2007.pdf
+
+
 ## Table of Contents
 
 - [Quick Start](#quick-start)
@@ -24,11 +28,6 @@ A simple, self-contained task management tool using the Eisenhower Decision Matr
 
 ## Quick Start
 
-### CLI Version (matrix.py)
-
-```bash
-python3 matrix.py
-```
 
 No installation, no dependencies, no setup required.
 
@@ -48,10 +47,6 @@ Open browser to http://localhost:5000
 
 ## Requirements
 
-### CLI Version (matrix.py)
-- Python 3.6 or higher (uses only standard library)
-- Optional: `colorama` for colored output (gracefully falls back to plain text if not available)
-
 ### Web UI Version (app.py)
 - Python 3.6 or higher
 - Flask 3.0.0+ (single external dependency)
@@ -60,22 +55,6 @@ Open browser to http://localhost:5000
 ---
 
 ## Installation
-
-### CLI Version Setup
-
-#### Option 1: No Installation (Recommended)
-Just run the program directly:
-```bash
-cd /path/to/eisen-h-matrix-task-manager
-python3 matrix.py
-```
-
-#### Option 2: With Colors (Optional)
-For colored output on Windows or enhanced colors on Linux/Mac:
-```bash
-pip install colorama
-python3 matrix.py
-```
 
 ### Web UI Version Setup
 
@@ -113,22 +92,6 @@ deactivate
 
 ## Features
 
-### CLI Features
-
-- ✅ Zero external dependencies (pure Python standard library)
-- ✅ Single file application (~600 lines)
-- ✅ ASCII art 2×2 matrix display with box-drawing characters
-- ✅ Color-coded quadrants (if colorama available, otherwise plain text)
-- ✅ Interactive command-line interface
-- ✅ SQLite database for persistence (auto-created as `tasks.db`)
-- ✅ Fully offline - no internet required
-- ✅ Cross-platform (Windows, Mac, Linux)
-- ✅ Task completion tracking with timestamps
-- ✅ Task archival with original quadrant history
-- ✅ Due date support with ISO format (YYYY-MM-DD)
-- ✅ Constraint: Maximum 100 active tasks
-- ✅ Auto-saves after every operation
-- ✅ Built-in help system and productivity principles viewer
 
 ### Web UI Features
 
@@ -187,20 +150,6 @@ Both versions display a 2×2 matrix with four quadrants:
 - **DECIDE** (Not Urgent & Important) - Blue - Schedule it
 - **DELEGATE** (Urgent & Not Important) - Red - Assign it
 - **DELETE** (Neither) - Gray - Eliminate it
-
-### CLI Commands
-
-- `add` or `a` - Add a new task (interactive prompts for title, description, quadrant, due date)
-- `move <id> to <quadrant>` or `m <id> <quadrant>` - Move task between quadrants
-  - Example: `move 1 to decide`
-- `complete <id>` or `c <id>` - Mark task as completed
-  - Example: `complete 1`
-- `archive <id>` or `ar <id>` - Archive a task
-  - Example: `archive 1`
-- `view archived` - View all archived tasks with original quadrant info
-- `principles` or `p` - Display 10 productivity principles
-- `help` or `h` - Show command help
-- `quit` or `q` - Exit application
 
 ### Web UI Operations
 
@@ -271,7 +220,6 @@ Both CLI and Web UI versions share the same database format and can be used inte
 ## Implementation Details
 
 ### Files Structure
-- `matrix.py` - CLI version (pure Python, no dependencies)
 - `app.py` - Web UI version (requires Flask)
 - `tasks.db` - SQLite database (auto-created)
 - `readme.md` - This documentation
