@@ -125,6 +125,7 @@ deactivate
   - Due date display
   - **Overdue visual indicator** - Cards turn bright red when due date passes
   - Completion status checkbox
+  - **✏️ Edit button** on every task card
   - Movement arrows to other quadrants
   - **📦 Archive button** on every task card
 - ✅ **Scroll Position Preservation**
@@ -180,14 +181,26 @@ Both versions display a 2×2 matrix with four quadrants:
    - Task instantly moves to new quadrant
    - Page refreshes to show updated matrix
 
-3. **Archiving Tasks**
+3. **Editing Tasks**
+   - Click **✏️ Edit** button on any task card
+   - Edit modal opens with current task information pre-filled
+   - Modify any field:
+     - Title (required, max 100 characters)
+     - Description (optional, max 500 characters)
+     - Quadrant selection (move task to different quadrant)
+     - Due date (add, modify, or clear date)
+   - Click "Save Changes" to update task
+   - Click "×" or click outside modal to cancel
+   - Changes are saved instantly and modal closes automatically
+
+4. **Archiving Tasks**
    - Click **📦 Archive** button on any task card
    - Task immediately moves to Archived Matrix below
    - Appears in same quadrant as original (DO/DECIDE/DELEGATE/DELETE)
    - Original quadrant preserved in database
    - Archive timestamp automatically recorded
 
-4. **Viewing Archived Tasks**
+5. **Viewing Archived Tasks**
    - Scroll down to see "📦 Archived Eisenhower Matrix" section
    - Archived tasks organized by their original quadrants
    - Each quadrant shows "Archived" badge
@@ -195,12 +208,12 @@ Both versions display a 2×2 matrix with four quadrants:
    - Archive date shown on each task
    - Read-only (cannot move or edit archived tasks)
 
-5. **Completing Tasks**
+6. **Completing Tasks**
    - Click checkbox on task card to mark complete
    - Completed tasks show [x] status
    - Completion timestamp automatically recorded
 
-6. **Viewing Principles**
+7. **Viewing Principles**
    - Click "View Principles" button in header
    - Displays all 10 productivity principles
    - Click "← Back to Matrix" to return
@@ -242,6 +255,11 @@ Both CLI and Web UI versions share the same database format and can be used inte
 - ✅ Web UI version with add task form
 - ✅ SQLite database integration
 - ✅ Task CRUD operations (Create, Read, Update, Delete/Archive)
+- ✅ **Edit task functionality**
+  - Modal-based edit interface
+  - Edit all fields: title, description, quadrant, due date
+  - Validation and character limits enforced
+  - Pre-fills current values for easy modification
 - ✅ Quadrant color coding
 - ✅ Task movement between quadrants
 - ✅ Completion tracking
@@ -260,8 +278,6 @@ Both CLI and Web UI versions share the same database format and can be used inte
 
 #### Pending Features (From TODO List)
 - [ ] Task limit enforcement (100 task maximum) in web UI
-- [ ] Edit existing tasks
-- [ ] View archived tasks page in web UI
 - [ ] Delete (hard delete) functionality
 - [ ] Task filtering and search
 - [ ] Export/import functionality

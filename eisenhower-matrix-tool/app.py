@@ -123,63 +123,120 @@ HTML_TEMPLATE = """
             background: #45a049;
         }
         
+        .matrix-wrapper {
+            max-width: 1300px;
+            margin: 0 auto 50px;
+        }
+        
+        .matrix-labels {
+            display: grid;
+            grid-template-columns: 80px 1fr;
+            grid-template-rows: 50px 1fr;
+            gap: 0;
+        }
+        
+        .axis-label {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .axis-label-left {
+            writing-mode: vertical-rl;
+            transform: rotate(180deg);
+            grid-column: 1;
+            grid-row: 2;
+        }
+        
+        .axis-label-top {
+            grid-column: 2;
+            grid-row: 1;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .axis-label-top > div {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+        
         .matrix-container {
+            grid-column: 2;
+            grid-row: 2;
             display: grid;
             grid-template-columns: 1fr 1fr;
             grid-template-rows: 1fr 1fr;
             gap: 20px;
-            max-width: 1200px;
-            margin: 0 auto;
             min-height: 600px;
         }
         
         .quadrant {
-            border: 2px solid #ddd;
-            border-radius: 10px;
-            padding: 20px;
+            border: none;
+            border-radius: 20px;
+            padding: 25px;
             min-height: 250px;
+            position: relative;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .quadrant-number {
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            font-size: 120px;
+            font-weight: bold;
+            opacity: 0.3;
+            color: white;
+            line-height: 1;
+            pointer-events: none;
         }
         
         .quadrant h2 {
-            margin-bottom: 10px;
-            font-size: 20px;
+            margin-bottom: 5px;
+            font-size: 32px;
             text-align: center;
+            font-weight: bold;
+            color: #000;
         }
         
         .quadrant-do {
-            background: #c8e6c9;
-            border-color: #4CAF50;
+            background: #4CAF50;
         }
         
         .quadrant-do h2 {
-            color: #2e7d32;
+            color: #000;
         }
         
         .quadrant-decide {
-            background: #b3e5fc;
-            border-color: #03A9F4;
+            background: #4DD0E1;
         }
         
         .quadrant-decide h2 {
-            color: #01579b;
+            color: #000;
         }
         
         .quadrant-delegate {
-            background: #ffcdd2;
-            border-color: #f44336;
+            background: #EF5350;
         }
         
         .quadrant-delegate h2 {
-            color: #b71c1c;
+            color: #000;
         }
         
         .quadrant-delete {
-            background: #e0e0e0;
-            border-color: #9e9e9e;
+            background: #BDBDBD;
         }
         
         .quadrant-delete h2 {
-            color: #424242;
+            color: #000;
         }
         
         .task-card {
@@ -238,10 +295,11 @@ HTML_TEMPLATE = """
         
         .quadrant-subtitle {
             text-align: center;
-            font-size: 12px;
-            color: #666;
+            font-size: 16px;
+            color: #000;
             font-style: italic;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
+            font-weight: 400;
         }
         
         .move-buttons {
@@ -276,6 +334,20 @@ HTML_TEMPLATE = """
         
         .archive-btn:hover {
             background: #757575;
+        }
+        
+        .edit-btn {
+            background: #ff9800;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        
+        .edit-btn:hover {
+            background: #f57c00;
         }
         
         .empty-message {
@@ -410,6 +482,56 @@ HTML_TEMPLATE = """
             color: #666;
             text-align: right;
         }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+        
+        .modal.show {
+            display: block;
+        }
+        
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 30px;
+            border: 1px solid #888;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 600px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+        
+        .close-modal {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 20px;
+        }
+        
+        .close-modal:hover,
+        .close-modal:focus {
+            color: #000;
+        }
+        
+        .modal-header {
+            margin-bottom: 20px;
+        }
+        
+        .modal-header h2 {
+            margin: 0;
+            color: #333;
+        }
     </style>
     <script>
         // Preserve scroll position on page reload
@@ -424,6 +546,28 @@ HTML_TEMPLATE = """
                 sessionStorage.removeItem('scrollPos');
             }
         });
+        
+        // Edit modal functions
+        function showEditModal(taskId, title, description, quadrant, dueDate) {
+            document.getElementById('editModal').classList.add('show');
+            document.getElementById('editTaskId').value = taskId;
+            document.getElementById('editTitle').value = title;
+            document.getElementById('editDescription').value = description || '';
+            document.getElementById('editQuadrant').value = quadrant;
+            document.getElementById('editDueDate').value = dueDate || '';
+        }
+        
+        function closeEditModal() {
+            document.getElementById('editModal').classList.remove('show');
+        }
+        
+        // Close modal if clicking outside of it
+        window.onclick = function(event) {
+            var modal = document.getElementById('editModal');
+            if (event.target == modal) {
+                closeEditModal();
+            }
+        }
     </script>
 </head>
 <body>
@@ -431,6 +575,48 @@ HTML_TEMPLATE = """
         <h1>Eisenhower Matrix Task Manager</h1>
         <a href="/principles" class="principles-btn">View Principles</a>
         <a href="/" class="toggle-form-btn" onclick="event.preventDefault(); document.getElementById('addTaskSection').classList.toggle('hidden');">➕ Add Task</a>
+    </div>
+    
+    <!-- Edit Task Modal -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="close-modal" onclick="closeEditModal()">&times;</span>
+                <h2>Edit Task</h2>
+            </div>
+            <form method="POST" action="/edit" id="editForm">
+                <input type="hidden" id="editTaskId" name="task_id">
+                
+                <div class="form-group">
+                    <label for="editTitle">Title <span class="required">*</span></label>
+                    <input type="text" id="editTitle" name="title" required maxlength="100" placeholder="Enter task title">
+                    <div class="char-count">Max 100 characters</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="editDescription">Description</label>
+                    <textarea id="editDescription" name="description" maxlength="500" placeholder="Enter task description (optional)"></textarea>
+                    <div class="char-count">Max 500 characters</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="editQuadrant">Quadrant <span class="required">*</span></label>
+                    <select id="editQuadrant" name="quadrant" required>
+                        <option value="do">DO - Urgent & Important (Do it now)</option>
+                        <option value="decide">DECIDE - Not Urgent & Important (Schedule it)</option>
+                        <option value="delegate">DELEGATE - Urgent & Not Important (Assign it)</option>
+                        <option value="delete">DELETE - Neither (Eliminate it)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="editDueDate">Due Date</label>
+                    <input type="date" id="editDueDate" name="due_date">
+                </div>
+                
+                <button type="submit" class="submit-btn">Save Changes</button>
+            </form>
+        </div>
     </div>
     
     <div id="addTaskSection" class="add-task-section">
@@ -468,10 +654,18 @@ HTML_TEMPLATE = """
         </form>
     </div>
     
-    <div class="matrix-container">
-        <div class="quadrant quadrant-do">
-            <h2>DO</h2>
-            <div class="quadrant-subtitle">Urgent & Important</div>
+    <div class="matrix-wrapper">
+        <div class="matrix-labels">
+            <div class="axis-label axis-label-left">Important</div>
+            <div class="axis-label axis-label-top">
+                <div>Urgent</div>
+                <div>Not Urgent</div>
+            </div>
+            <div class="matrix-container">
+                <div class="quadrant quadrant-do">
+                    <div class="quadrant-number">1</div>
+                    <h2>Do</h2>
+                    <div class="quadrant-subtitle">Do it now.</div>
             {% if tasks['do'] %}
                 {% for task in tasks['do'] %}
                 <div class="task-card{% if is_overdue(task) %} overdue{% endif %}">
@@ -484,6 +678,7 @@ HTML_TEMPLATE = """
                     <div class="task-due-date{% if is_overdue(task) %} overdue{% endif %}">Due: {{ task.due_date }}</div>
                     {% endif %}
                     <div class="move-buttons">
+                        <button type="button" class="edit-btn" onclick="showEditModal({{ task.id }}, '{{ task.title|replace("'", "\\'")|replace('"', '&quot;') }}', '{{ task.description|replace("'", "\\'")|replace('"', '&quot;') }}', '{{ task.quadrant }}', '{{ task.due_date or '' }}')">✏️ Edit</button>
                         <form method="POST" action="/move/{{ task.id }}/decide" style="display: inline;">
                             <button type="submit" class="move-btn">→ Decide</button>
                         </form>
@@ -504,9 +699,10 @@ HTML_TEMPLATE = """
             {% endif %}
         </div>
         
-        <div class="quadrant quadrant-decide">
-            <h2>DECIDE</h2>
-            <div class="quadrant-subtitle">Not Urgent & Important</div>
+                <div class="quadrant quadrant-decide">
+                    <div class="quadrant-number">2</div>
+                    <h2>Decide</h2>
+                    <div class="quadrant-subtitle">Schedule a time to do it</div>
             {% if tasks['decide'] %}
                 {% for task in tasks['decide'] %}
                 <div class="task-card{% if is_overdue(task) %} overdue{% endif %}">
@@ -519,6 +715,7 @@ HTML_TEMPLATE = """
                     <div class="task-due-date{% if is_overdue(task) %} overdue{% endif %}">Due: {{ task.due_date }}</div>
                     {% endif %}
                     <div class="move-buttons">
+                        <button type="button" class="edit-btn" onclick="showEditModal({{ task.id }}, '{{ task.title|replace("'", "\\'")|replace('"', '&quot;') }}', '{{ task.description|replace("'", "\\'")|replace('"', '&quot;') }}', '{{ task.quadrant }}', '{{ task.due_date or '' }}')">✏️ Edit</button>
                         <form method="POST" action="/move/{{ task.id }}/do" style="display: inline;">
                             <button type="submit" class="move-btn">← Do</button>
                         </form>
@@ -539,9 +736,10 @@ HTML_TEMPLATE = """
             {% endif %}
         </div>
         
-        <div class="quadrant quadrant-delegate">
-            <h2>DELEGATE</h2>
-            <div class="quadrant-subtitle">Urgent & Not Important</div>
+                <div class="quadrant quadrant-delegate">
+                    <div class="quadrant-number">3</div>
+                    <h2>Delegate</h2>
+                    <div class="quadrant-subtitle">Who can do it for you?</div>
             {% if tasks['delegate'] %}
                 {% for task in tasks['delegate'] %}
                 <div class="task-card{% if is_overdue(task) %} overdue{% endif %}">
@@ -554,6 +752,7 @@ HTML_TEMPLATE = """
                     <div class="task-due-date{% if is_overdue(task) %} overdue{% endif %}">Due: {{ task.due_date }}</div>
                     {% endif %}
                     <div class="move-buttons">
+                        <button type="button" class="edit-btn" onclick="showEditModal({{ task.id }}, '{{ task.title|replace("'", "\\'")|replace('"', '&quot;') }}', '{{ task.description|replace("'", "\\'")|replace('"', '&quot;') }}', '{{ task.quadrant }}', '{{ task.due_date or '' }}')">✏️ Edit</button>
                         <form method="POST" action="/move/{{ task.id }}/do" style="display: inline;">
                             <button type="submit" class="move-btn">↑ Do</button>
                         </form>
@@ -574,9 +773,10 @@ HTML_TEMPLATE = """
             {% endif %}
         </div>
         
-        <div class="quadrant quadrant-delete">
-            <h2>DELETE</h2>
-            <div class="quadrant-subtitle">Not Urgent & Not Important</div>
+                <div class="quadrant quadrant-delete">
+                    <div class="quadrant-number">4</div>
+                    <h2>Delete</h2>
+                    <div class="quadrant-subtitle">Eliminate it</div>
             {% if tasks['delete'] %}
                 {% for task in tasks['delete'] %}
                 <div class="task-card{% if is_overdue(task) %} overdue{% endif %}">
@@ -589,6 +789,7 @@ HTML_TEMPLATE = """
                     <div class="task-due-date{% if is_overdue(task) %} overdue{% endif %}">Due: {{ task.due_date }}</div>
                     {% endif %}
                     <div class="move-buttons">
+                        <button type="button" class="edit-btn" onclick="showEditModal({{ task.id }}, '{{ task.title|replace("'", "\\'")|replace('"', '&quot;') }}', '{{ task.description|replace("'", "\\'")|replace('"', '&quot;') }}', '{{ task.quadrant }}', '{{ task.due_date or '' }}')">✏️ Edit</button>
                         <form method="POST" action="/move/{{ task.id }}/do" style="display: inline;">
                             <button type="submit" class="move-btn">↖ Do</button>
                         </form>
@@ -608,6 +809,8 @@ HTML_TEMPLATE = """
                 <div class="empty-message">No tasks here</div>
             {% endif %}
         </div>
+            </div>
+        </div>
     </div>
     
     <!-- Archived Eisenhower Matrix -->
@@ -617,89 +820,102 @@ HTML_TEMPLATE = """
             <p style="color: #666;">Tasks are shown in their original quadrants</p>
         </div>
         
-        <div class="matrix-container">
-            <div class="quadrant quadrant-do">
-                <h2>DO <span class="archived-badge">Archived</span></h2>
-                <div class="quadrant-subtitle">Urgent & Important</div>
-                {% if archived_tasks['do'] %}
-                    {% for task in archived_tasks['do'] %}
-                    <div class="archived-task-card">
-                        <div class="task-title">{{ task.title }}</div>
-                        <div class="task-description">{{ task.description }}</div>
-                        {% if task.due_date %}
-                        <div class="task-description">Due: {{ task.due_date }}</div>
-                        {% endif %}
-                        {% if task.archived_at %}
-                        <div class="task-description" style="font-size: 12px; color: #999;">Archived: {{ task.archived_at[:10] }}</div>
+        <div class="matrix-wrapper">
+            <div class="matrix-labels">
+                <div class="axis-label axis-label-left">Important</div>
+                <div class="axis-label axis-label-top">
+                    <div>Urgent</div>
+                    <div>Not Urgent</div>
+                </div>
+                <div class="matrix-container">
+                    <div class="quadrant quadrant-do">
+                        <div class="quadrant-number">1</div>
+                        <h2>Do <span class="archived-badge">Archived</span></h2>
+                        <div class="quadrant-subtitle">Do it now.</div>
+                        {% if archived_tasks['do'] %}
+                            {% for task in archived_tasks['do'] %}
+                            <div class="archived-task-card">
+                                <div class="task-title">{{ task.title }}</div>
+                                <div class="task-description">{{ task.description }}</div>
+                                {% if task.due_date %}
+                                <div class="task-description">Due: {{ task.due_date }}</div>
+                                {% endif %}
+                                {% if task.archived_at %}
+                                <div class="task-description" style="font-size: 12px; color: #999;">Archived: {{ task.archived_at[:10] }}</div>
+                                {% endif %}
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="empty-message">No archived tasks</div>
                         {% endif %}
                     </div>
-                    {% endfor %}
-                {% else %}
-                    <div class="empty-message">No archived tasks</div>
-                {% endif %}
-            </div>
             
-            <div class="quadrant quadrant-decide">
-                <h2>DECIDE <span class="archived-badge">Archived</span></h2>
-                <div class="quadrant-subtitle">Not Urgent & Important</div>
-                {% if archived_tasks['decide'] %}
-                    {% for task in archived_tasks['decide'] %}
-                    <div class="archived-task-card">
-                        <div class="task-title">{{ task.title }}</div>
-                        <div class="task-description">{{ task.description }}</div>
-                        {% if task.due_date %}
-                        <div class="task-description">Due: {{ task.due_date }}</div>
-                        {% endif %}
-                        {% if task.archived_at %}
-                        <div class="task-description" style="font-size: 12px; color: #999;">Archived: {{ task.archived_at[:10] }}</div>
+                    <div class="quadrant quadrant-decide">
+                        <div class="quadrant-number">2</div>
+                        <h2>Decide <span class="archived-badge">Archived</span></h2>
+                        <div class="quadrant-subtitle">Schedule a time to do it</div>
+                        {% if archived_tasks['decide'] %}
+                            {% for task in archived_tasks['decide'] %}
+                            <div class="archived-task-card">
+                                <div class="task-title">{{ task.title }}</div>
+                                <div class="task-description">{{ task.description }}</div>
+                                {% if task.due_date %}
+                                <div class="task-description">Due: {{ task.due_date }}</div>
+                                {% endif %}
+                                {% if task.archived_at %}
+                                <div class="task-description" style="font-size: 12px; color: #999;">Archived: {{ task.archived_at[:10] }}</div>
+                                {% endif %}
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="empty-message">No archived tasks</div>
                         {% endif %}
                     </div>
-                    {% endfor %}
-                {% else %}
-                    <div class="empty-message">No archived tasks</div>
-                {% endif %}
-            </div>
             
-            <div class="quadrant quadrant-delegate">
-                <h2>DELEGATE <span class="archived-badge">Archived</span></h2>
-                <div class="quadrant-subtitle">Urgent & Not Important</div>
-                {% if archived_tasks['delegate'] %}
-                    {% for task in archived_tasks['delegate'] %}
-                    <div class="archived-task-card">
-                        <div class="task-title">{{ task.title }}</div>
-                        <div class="task-description">{{ task.description }}</div>
-                        {% if task.due_date %}
-                        <div class="task-description">Due: {{ task.due_date }}</div>
-                        {% endif %}
-                        {% if task.archived_at %}
-                        <div class="task-description" style="font-size: 12px; color: #999;">Archived: {{ task.archived_at[:10] }}</div>
+                    <div class="quadrant quadrant-delegate">
+                        <div class="quadrant-number">3</div>
+                        <h2>Delegate <span class="archived-badge">Archived</span></h2>
+                        <div class="quadrant-subtitle">Who can do it for you?</div>
+                        {% if archived_tasks['delegate'] %}
+                            {% for task in archived_tasks['delegate'] %}
+                            <div class="archived-task-card">
+                                <div class="task-title">{{ task.title }}</div>
+                                <div class="task-description">{{ task.description }}</div>
+                                {% if task.due_date %}
+                                <div class="task-description">Due: {{ task.due_date }}</div>
+                                {% endif %}
+                                {% if task.archived_at %}
+                                <div class="task-description" style="font-size: 12px; color: #999;">Archived: {{ task.archived_at[:10] }}</div>
+                                {% endif %}
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="empty-message">No archived tasks</div>
                         {% endif %}
                     </div>
-                    {% endfor %}
-                {% else %}
-                    <div class="empty-message">No archived tasks</div>
-                {% endif %}
-            </div>
             
-            <div class="quadrant quadrant-delete">
-                <h2>DELETE <span class="archived-badge">Archived</span></h2>
-                <div class="quadrant-subtitle">Not Urgent & Not Important</div>
-                {% if archived_tasks['delete'] %}
-                    {% for task in archived_tasks['delete'] %}
-                    <div class="archived-task-card">
-                        <div class="task-title">{{ task.title }}</div>
-                        <div class="task-description">{{ task.description }}</div>
-                        {% if task.due_date %}
-                        <div class="task-description">Due: {{ task.due_date }}</div>
-                        {% endif %}
-                        {% if task.archived_at %}
-                        <div class="task-description" style="font-size: 12px; color: #999;">Archived: {{ task.archived_at[:10] }}</div>
+                    <div class="quadrant quadrant-delete">
+                        <div class="quadrant-number">4</div>
+                        <h2>Delete <span class="archived-badge">Archived</span></h2>
+                        <div class="quadrant-subtitle">Eliminate it</div>
+                        {% if archived_tasks['delete'] %}
+                            {% for task in archived_tasks['delete'] %}
+                            <div class="archived-task-card">
+                                <div class="task-title">{{ task.title }}</div>
+                                <div class="task-description">{{ task.description }}</div>
+                                {% if task.due_date %}
+                                <div class="task-description">Due: {{ task.due_date }}</div>
+                                {% endif %}
+                                {% if task.archived_at %}
+                                <div class="task-description" style="font-size: 12px; color: #999;">Archived: {{ task.archived_at[:10] }}</div>
+                                {% endif %}
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="empty-message">No archived tasks</div>
                         {% endif %}
                     </div>
-                    {% endfor %}
-                {% else %}
-                    <div class="empty-message">No archived tasks</div>
-                {% endif %}
+                </div>
             </div>
         </div>
     </div>
@@ -811,6 +1027,38 @@ def add_task():
         INSERT INTO tasks (title, description, quadrant, due_date, created_at, original_quadrant)
         VALUES (?, ?, ?, ?, ?, ?)
     ''', (title, description, quadrant, due_date if due_date else None, datetime.now().isoformat(), quadrant))
+    conn.commit()
+    conn.close()
+    
+    return redirect(url_for('index'))
+
+@app.route('/edit', methods=['POST'])
+def edit_task():
+    task_id = request.form.get('task_id', '').strip()
+    title = request.form.get('title', '').strip()
+    description = request.form.get('description', '').strip()
+    quadrant = request.form.get('quadrant', '').strip()
+    due_date = request.form.get('due_date', '').strip()
+    
+    # Validation
+    if not task_id or not title or not quadrant:
+        return redirect(url_for('index'))
+    
+    if quadrant not in ['do', 'decide', 'delegate', 'delete']:
+        return redirect(url_for('index'))
+    
+    # Truncate if needed
+    title = title[:100]
+    description = description[:500]
+    
+    # Update in database
+    conn = sqlite3.connect(DB_FILE)
+    cursor = conn.cursor()
+    cursor.execute('''
+        UPDATE tasks 
+        SET title = ?, description = ?, quadrant = ?, due_date = ?
+        WHERE id = ? AND archived = 0
+    ''', (title, description, quadrant, due_date if due_date else None, task_id))
     conn.commit()
     conn.close()
     
