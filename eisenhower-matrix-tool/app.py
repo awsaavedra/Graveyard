@@ -21,12 +21,29 @@ def init_db():
             due_date TEXT,
             completed INTEGER DEFAULT 0,
             archived INTEGER DEFAULT 0,
+            deleted INTEGER DEFAULT 0,
             original_quadrant TEXT,
             created_at TEXT NOT NULL,
             completed_at TEXT,
-            archived_at TEXT
+            archived_at TEXT,
+            deleted_at TEXT
         )
     ''')
+    
+    # Add deleted column if it doesn't exist (migration)
+    try:
+        cursor.execute("ALTER TABLE tasks ADD COLUMN deleted INTEGER DEFAULT 0")
+        conn.commit()
+    except sqlite3.OperationalError:
+        pass  # Column already exists
+    
+    # Add deleted_at column if it doesn't exist (migration)
+    try:
+        cursor.execute("ALTER TABLE tasks ADD COLUMN deleted_at TEXT")
+        conn.commit()
+    except sqlite3.OperationalError:
+        pass  # Column already exists
+    
     conn.commit()
     
     # Add test card if database is empty
@@ -41,11 +58,11 @@ def init_db():
     conn.close()
 
 def get_tasks():
-    """Get all non-archived tasks"""
+    """Get all non-archived, non-deleted tasks"""
     conn = sqlite3.connect(DB_FILE)
     conn.row_factory = sqlite3.Row
     cursor = conn.cursor()
-    cursor.execute('SELECT * FROM tasks WHERE archived = 0 ORDER BY created_at ASC')
+    cursor.execute('SELECT * FROM tasks WHERE archived = 0 AND deleted = 0 ORDER BY created_at ASC')
     tasks = [dict(row) for row in cursor.fetchall()]
     conn.close()
     
@@ -61,7 +78,7 @@ def get_archived_tasks():
     conn = sqlite3.connect(DB_FILE)
     conn.row_factory = sqlite3.Row
     cursor = conn.cursor()
-    cursor.execute('SELECT * FROM tasks WHERE archived = 1 ORDER BY archived_at DESC')
+    cursor.execute('SELECT * FROM tasks WHERE archived = 1 AND deleted = 0 ORDER BY archived_at DESC')
     tasks = [dict(row) for row in cursor.fetchall()]
     conn.close()
     
@@ -73,6 +90,16 @@ def get_archived_tasks():
             tasks_by_quadrant[original].append(task)
     
     return tasks_by_quadrant
+
+def get_deleted_tasks():
+    """Get all deleted tasks"""
+    conn = sqlite3.connect(DB_FILE)
+    conn.row_factory = sqlite3.Row
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM tasks WHERE deleted = 1 ORDER BY deleted_at DESC')
+    tasks = [dict(row) for row in cursor.fetchall()]
+    conn.close()
+    return tasks
 
 # Initialize database on startup
 init_db()
@@ -190,13 +217,31 @@ HTML_TEMPLATE = """
         .quadrant-number {
             position: absolute;
             top: 20px;
-            right: 25px;
-            font-size: 120px;
+            left: 25px;
+            font-size: 48px;
             font-weight: bold;
-            opacity: 0.3;
+            opacity: 0.5;
             color: white;
             line-height: 1;
             pointer-events: none;
+        }
+        
+        .quadrant-task-count {
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            font-size: 14px;
+            font-weight: normal;
+            opacity: 0.7;
+            color: white;
+            line-height: 1;
+            pointer-events: none;
+        }
+        
+        .quadrant-task-count.overflow {
+            color: #d32f2f;
+            opacity: 1;
+            font-weight: bold;
         }
         
         .quadrant h2 {
@@ -276,6 +321,12 @@ HTML_TEMPLATE = """
             margin-bottom: 5px;
         }
         
+        .task-card.overflow-task .task-title,
+        .task-card.overflow-task .task-description,
+        .task-card.overflow-task .task-due-date {
+            color: #d32f2f;
+        }
+        
         .task-due-date {
             font-size: 13px;
             color: #666;
@@ -350,6 +401,20 @@ HTML_TEMPLATE = """
             background: #f57c00;
         }
         
+        .permanent-delete-btn {
+            background: #d32f2f;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        
+        .permanent-delete-btn:hover {
+            background: #b71c1c;
+        }
+        
         .empty-message {
             text-align: center;
             color: #999;
@@ -391,6 +456,68 @@ HTML_TEMPLATE = """
             border-radius: 3px;
             font-size: 11px;
             margin-left: 8px;
+        }
+        
+        .graveyard-section {
+            margin-top: 40px;
+            padding-top: 40px;
+            border-top: 3px solid #ddd;
+        }
+        
+        .graveyard-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .graveyard-header h2 {
+            color: #666;
+            font-size: 24px;
+        }
+        
+        .graveyard-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .deleted-task-card {
+            background: #f5f5f5;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+        
+        .restore-btn {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        
+        .restore-btn:hover {
+            background: #45a049;
+        }
+        
+        .actual-delete-btn {
+            background: #d32f2f;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        
+        .actual-delete-btn:hover {
+            background: #b71c1c;
         }
         
         .add-task-section {
@@ -532,6 +659,52 @@ HTML_TEMPLATE = """
             margin: 0;
             color: #333;
         }
+        
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .modal-btn-delete {
+            flex: 1;
+            background: #d32f2f;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .modal-btn-delete:hover {
+            background: #b71c1c;
+        }
+        
+        .modal-btn-cancel {
+            flex: 1;
+            background: #9e9e9e;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .modal-btn-cancel:hover {
+            background: #757575;
+        }
+        
+        .delete-warning {
+            margin: 15px 0;
+            padding: 15px;
+            background: #ffebee;
+            border-left: 4px solid #d32f2f;
+            border-radius: 4px;
+            color: #333;
+        }
     </style>
     <script>
         // Preserve scroll position on page reload
@@ -561,11 +734,40 @@ HTML_TEMPLATE = """
             document.getElementById('editModal').classList.remove('show');
         }
         
+        // Delete confirmation modal functions
+        var deleteTaskId = null;
+        
+        function showDeleteModal(taskId) {
+            deleteTaskId = taskId;
+            document.getElementById('deleteModal').classList.add('show');
+            return false; // Prevent form submission
+        }
+        
+        function closeDeleteModal() {
+            document.getElementById('deleteModal').classList.remove('show');
+            deleteTaskId = null;
+        }
+        
+        function confirmDelete() {
+            if (deleteTaskId) {
+                // Try both form ID patterns
+                var form = document.getElementById('deleteForm' + deleteTaskId) || 
+                          document.getElementById('deleteForeverForm' + deleteTaskId);
+                if (form) {
+                    form.submit();
+                }
+            }
+        }
+        
         // Close modal if clicking outside of it
         window.onclick = function(event) {
-            var modal = document.getElementById('editModal');
-            if (event.target == modal) {
+            var editModal = document.getElementById('editModal');
+            var deleteModal = document.getElementById('deleteModal');
+            if (event.target == editModal) {
                 closeEditModal();
+            }
+            if (event.target == deleteModal) {
+                closeDeleteModal();
             }
         }
     </script>
@@ -619,6 +821,24 @@ HTML_TEMPLATE = """
         </div>
     </div>
     
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="close-modal" onclick="closeDeleteModal()">&times;</span>
+                <h2>Permanently Delete Task</h2>
+            </div>
+            <div class="delete-warning">
+                <strong>⚠️ Warning:</strong> This task will be permanently deleted and cannot be recovered.
+            </div>
+            <p>Are you sure you want to continue?</p>
+            <div class="modal-buttons">
+                <button type="button" class="modal-btn-delete" onclick="confirmDelete()">Delete</button>
+                <button type="button" class="modal-btn-cancel" onclick="closeDeleteModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+    
     <div id="addTaskSection" class="add-task-section">
         <h2>Add New Task</h2>
         <form method="POST" action="/add">
@@ -664,11 +884,12 @@ HTML_TEMPLATE = """
             <div class="matrix-container">
                 <div class="quadrant quadrant-do">
                     <div class="quadrant-number">1</div>
+                    <div class="quadrant-task-count{% if tasks['do']|length > 2 %} overflow{% endif %}">{{ tasks['do']|length }} of 2 tasks</div>
                     <h2>Do</h2>
                     <div class="quadrant-subtitle">Do it now.</div>
             {% if tasks['do'] %}
                 {% for task in tasks['do'] %}
-                <div class="task-card{% if is_overdue(task) %} overdue{% endif %}">
+                <div class="task-card{% if is_overdue(task) %} overdue{% endif %}{% if loop.index0 >= 2 %} overflow-task{% endif %}">
                     <div class="task-title">
                         {{ task.title }}
                         {% if is_overdue(task) %}<span class="overdue-badge">OVERDUE</span>{% endif %}
@@ -701,11 +922,12 @@ HTML_TEMPLATE = """
         
                 <div class="quadrant quadrant-decide">
                     <div class="quadrant-number">2</div>
+                    <div class="quadrant-task-count{% if tasks['decide']|length > 2 %} overflow{% endif %}">{{ tasks['decide']|length }} of 2 tasks</div>
                     <h2>Decide</h2>
                     <div class="quadrant-subtitle">Schedule a time to do it</div>
             {% if tasks['decide'] %}
                 {% for task in tasks['decide'] %}
-                <div class="task-card{% if is_overdue(task) %} overdue{% endif %}">
+                <div class="task-card{% if is_overdue(task) %} overdue{% endif %}{% if loop.index0 >= 2 %} overflow-task{% endif %}">
                     <div class="task-title">
                         {{ task.title }}
                         {% if is_overdue(task) %}<span class="overdue-badge">OVERDUE</span>{% endif %}
@@ -738,11 +960,12 @@ HTML_TEMPLATE = """
         
                 <div class="quadrant quadrant-delegate">
                     <div class="quadrant-number">3</div>
+                    <div class="quadrant-task-count{% if tasks['delegate']|length > 2 %} overflow{% endif %}">{{ tasks['delegate']|length }} of 2 tasks</div>
                     <h2>Delegate</h2>
                     <div class="quadrant-subtitle">Who can do it for you?</div>
             {% if tasks['delegate'] %}
                 {% for task in tasks['delegate'] %}
-                <div class="task-card{% if is_overdue(task) %} overdue{% endif %}">
+                <div class="task-card{% if is_overdue(task) %} overdue{% endif %}{% if loop.index0 >= 2 %} overflow-task{% endif %}">
                     <div class="task-title">
                         {{ task.title }}
                         {% if is_overdue(task) %}<span class="overdue-badge">OVERDUE</span>{% endif %}
@@ -775,11 +998,12 @@ HTML_TEMPLATE = """
         
                 <div class="quadrant quadrant-delete">
                     <div class="quadrant-number">4</div>
+                    <div class="quadrant-task-count{% if tasks['delete']|length > 2 %} overflow{% endif %}">{{ tasks['delete']|length }} of 2 tasks</div>
                     <h2>Delete</h2>
                     <div class="quadrant-subtitle">Eliminate it</div>
             {% if tasks['delete'] %}
                 {% for task in tasks['delete'] %}
-                <div class="task-card{% if is_overdue(task) %} overdue{% endif %}">
+                <div class="task-card{% if is_overdue(task) %} overdue{% endif %}{% if loop.index0 >= 2 %} overflow-task{% endif %}">
                     <div class="task-title">
                         {{ task.title }}
                         {% if is_overdue(task) %}<span class="overdue-badge">OVERDUE</span>{% endif %}
@@ -801,6 +1025,9 @@ HTML_TEMPLATE = """
                         </form>
                         <form method="POST" action="/archive/{{ task.id }}" style="display: inline;">
                             <button type="submit" class="archive-btn">📦 Archive</button>
+                        </form>
+                        <form method="POST" action="/permanent-delete/{{ task.id }}" id="deleteForm{{ task.id }}" style="display: inline;">
+                            <button type="button" class="permanent-delete-btn" onclick="showDeleteModal({{ task.id }})">🗑️ Delete Forever</button>
                         </form>
                     </div>
                 </div>
@@ -909,6 +1136,11 @@ HTML_TEMPLATE = """
                                 {% if task.archived_at %}
                                 <div class="task-description" style="font-size: 12px; color: #999;">Archived: {{ task.archived_at[:10] }}</div>
                                 {% endif %}
+                                <div class="move-buttons" style="margin-top: 10px;">
+                                    <form method="POST" action="/permanent-delete/{{ task.id }}" id="deleteForm{{ task.id }}" style="display: inline;">
+                                        <button type="button" class="permanent-delete-btn" onclick="showDeleteModal({{ task.id }})">🗑️ Delete Forever</button>
+                                    </form>
+                                </div>
                             </div>
                             {% endfor %}
                         {% else %}
@@ -917,6 +1149,40 @@ HTML_TEMPLATE = """
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+    
+    <!-- The Graveyard -->
+    <div class="graveyard-section">
+        <div class="graveyard-header">
+            <h2>🪦 The Graveyard</h2>
+            <p style="color: #666;">Deleted tasks are stored here until permanently removed</p>
+        </div>
+        <div class="graveyard-container">
+            {% if deleted_tasks %}
+                {% for task in deleted_tasks %}
+                <div class="deleted-task-card">
+                    <div class="task-title">{{ task.title }}</div>
+                    <div class="task-description">{{ task.description }}</div>
+                    {% if task.due_date %}
+                    <div class="task-description">Due: {{ task.due_date }}</div>
+                    {% endif %}
+                    {% if task.deleted_at %}
+                    <div class="task-description" style="font-size: 12px; color: #999;">Deleted: {{ task.deleted_at[:10] }}</div>
+                    {% endif %}
+                    <div class="move-buttons" style="margin-top: 10px;">
+                        <form method="POST" action="/restore/{{ task.id }}" style="display: inline;">
+                            <button type="submit" class="restore-btn">↩️ Restore</button>
+                        </form>
+                        <form method="POST" action="/delete-forever/{{ task.id }}" id="deleteForeverForm{{ task.id }}" style="display: inline;">
+                            <button type="button" class="actual-delete-btn" onclick="showDeleteModal({{ task.id }})">🗑️ Permanently Delete</button>
+                        </form>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-message">No deleted tasks</div>
+            {% endif %}
         </div>
     </div>
 </body>
@@ -992,6 +1258,7 @@ PRINCIPLES_TEMPLATE = """
 def index():
     tasks = get_tasks()
     archived_tasks = get_archived_tasks()
+    deleted_tasks = get_deleted_tasks()
     today = datetime.now().strftime('%Y-%m-%d')
     
     # Helper function to check if task is overdue
@@ -1000,7 +1267,7 @@ def index():
             return task['due_date'] < today
         return False
     
-    return render_template_string(HTML_TEMPLATE, tasks=tasks, archived_tasks=archived_tasks, today=today, is_overdue=is_overdue)
+    return render_template_string(HTML_TEMPLATE, tasks=tasks, archived_tasks=archived_tasks, deleted_tasks=deleted_tasks, today=today, is_overdue=is_overdue)
 
 @app.route('/add', methods=['POST'])
 def add_task():
@@ -1108,6 +1375,42 @@ def archive_task(task_id):
             WHERE id = ?
         ''', (datetime.now().isoformat(), current_quadrant, task_id))
         conn.commit()
+    conn.close()
+    
+    return redirect(url_for('index'))
+
+@app.route('/permanent-delete/<int:task_id>', methods=['POST'])
+def permanent_delete_task(task_id):
+    conn = sqlite3.connect(DB_FILE)
+    cursor = conn.cursor()
+    cursor.execute('''
+        UPDATE tasks SET deleted = 1, deleted_at = ?
+        WHERE id = ?
+    ''', (datetime.now().isoformat(), task_id))
+    conn.commit()
+    conn.close()
+    
+    return redirect(url_for('index'))
+
+@app.route('/restore/<int:task_id>', methods=['POST'])
+def restore_task(task_id):
+    conn = sqlite3.connect(DB_FILE)
+    cursor = conn.cursor()
+    cursor.execute('''
+        UPDATE tasks SET deleted = 0, deleted_at = NULL, archived = 0, archived_at = NULL
+        WHERE id = ?
+    ''', (task_id,))
+    conn.commit()
+    conn.close()
+    
+    return redirect(url_for('index'))
+
+@app.route('/delete-forever/<int:task_id>', methods=['POST'])
+def delete_forever_task(task_id):
+    conn = sqlite3.connect(DB_FILE)
+    cursor = conn.cursor()
+    cursor.execute('DELETE FROM tasks WHERE id = ?', (task_id,))
+    conn.commit()
     conn.close()
     
     return redirect(url_for('index'))
