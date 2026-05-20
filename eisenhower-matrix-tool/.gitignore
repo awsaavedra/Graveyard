@@ -1,0 +1,39 @@
+# Database files
+tasks.db
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Virtual environments - ignore all common patterns
+venv/
+env/
+ENV/
+.venv/
+*.egg
+*.egg-info/
+dist/
+build/
+.Python
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.manifest
+*.spec
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
