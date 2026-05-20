@@ -1,0 +1,9 @@
+baseURL = "https://stupendous-douhua-72c593.netlify.app/"
+languageCode = "en-us"
+title = "JAMSite"
+theme = "tale"
+copyright = "Copyright 2022"
+disableKinds = ["section"]
+
+[outputs]
+  home = ["HTML", "JSON"]
